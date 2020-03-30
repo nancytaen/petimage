@@ -1,0 +1,9 @@
+# all files in .idea directory
+*.idea
+
+# all pycache
+*.pyc
+*.pycache
+
+# environment variable file
+.venv

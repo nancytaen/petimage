@@ -6,4 +6,4 @@
 *.pycache
 
 # environment variable file
-.venv
+venv

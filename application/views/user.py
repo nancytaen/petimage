@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, url_for
 
-from application.form import UserRegistrationForm
+from application.form import UserRegistrationForm, UserLoginForm
 from application.navigation import top_level_nav
 
 user = Blueprint('user', __name__, template_folder='templates', static_folder='static')
@@ -19,5 +19,9 @@ def signup():
 
 @user.route('/login', methods=['GET', 'POST'])
 def login():
+    login_form = UserLoginForm(request.form)
+    if request.method == "POST":
+        if login_form.validate():
+            print("success")
     return render_template('user/login.html', title="login",
-                           description="login", nav=top_level_nav())
+                           description="login", nav=top_level_nav(), form=login_form)

@@ -4,6 +4,7 @@ from flask_cors import CORS
 from config import configObject
 from application.model.model import init_db
 from application.views.user import user
+from application.navigation import top_level_nav
 
 
 def create_app():
@@ -19,12 +20,11 @@ def create_app():
         app.register_blueprint(user)
 
     @app.route('/')
+    @app.route('/top')
     def top_page():
-        nav = [{'name': 'Home', 'url': '/home'},
-               {'name': 'Top', 'url': '/top'}]
         return render_template("top.html",
                                title="top", description="this is top",
-                               nav=nav)
+                               nav=top_level_nav())
 
     # instantiate db connection
     init_db()

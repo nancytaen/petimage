@@ -2,7 +2,7 @@
 
 {% block content %}
     <div>
-        <h2 class="title text-center">Create Account</h2>
+        <h2 class="text-center">{{ title }}</h2>
         <div class="card col-sm-6 mx-auto">
         <form method="POST" action="/signup">
             {% for message in get_flashed_messages() %}

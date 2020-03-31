@@ -14,7 +14,7 @@ def signup():
             print("success")
             flash("User already exists.")
             # return redirect(url_for('user.login'))
-    return render_template('user/signup.html', title="sign up",
+    return render_template('user/signup.html', title="Create Account",
                            description="create new account", nav=top_level_nav(), form=signup_form)
 
 
@@ -26,4 +26,4 @@ def login():
             print("success")
         flash("User does not exist")
     return render_template('user/login.html', title="login",
-                           description="login", nav=top_level_nav(), form=login_form)
+                           description="Login", nav=top_level_nav(), form=login_form)

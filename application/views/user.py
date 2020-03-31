@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for
+from flask import Blueprint, request, render_template, redirect, url_for, flash
 
 from application.form import UserRegistrationForm, UserLoginForm
 from application.navigation import top_level_nav
@@ -23,5 +23,6 @@ def login():
     if request.method == "POST":
         if login_form.validate():
             print("success")
+        flash("User does not exist")
     return render_template('user/login.html', title="login",
                            description="login", nav=top_level_nav(), form=login_form)

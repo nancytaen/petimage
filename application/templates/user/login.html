@@ -3,6 +3,9 @@
 {% block content %}
     <h2>{{ title }}</h2>
     <form method="POST" action="/login">
+        {% for message in get_flashed_messages() %}
+            <div> {{ message }} </div>
+        {% endfor %}
         <div>
             {{ form.email.label }} {{ form.email }}
             {% if form.email.errors %}

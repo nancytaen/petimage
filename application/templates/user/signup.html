@@ -2,33 +2,43 @@
 
 {% block content %}
     <div>
-        <h2 class="title">Contact</h2>
+        <h2 class="title text-center">Create Account</h2>
+        <div class="card col-sm-6 mx-auto">
         <form method="POST" action="/signup">
             {% for message in get_flashed_messages() %}
                 <div>{{ message }}</div>
             {% endfor %}
-            <div class="form-field">{{ form.email.label }} {{ form.email }}
+            <div class="form-group">
+                <label for="email">{{ form.email.label }} </label>
+                {{ form.email(class="form-control") }}
                 {% if form.email.errors %}
                     {% for error in form.email.errors %}
                         <div>{{ error }}</div>
                     {% endfor %}
                 {% endif %}
             </div>
-            <div class="form-field">{{ form.password.label }} {{ form.password }}
+            <div class="form-group">
+                <label for="password">{{ form.password.label }} </label>
+                {{ form.password(class="form-control") }}
                 {% if form.password.errors %}
                     {% for error in form.password.errors %}
                         <div>{{ error }}</div>
                     {% endfor %}
                 {% endif %}
             </div>
-            <div class="form-field">{{ form.confirm_password.label }} {{ form.confirm_password }}
+            <div class="form-group">
+                <label for="confirm_password"> {{ form.confirm_password.label }} </label>
+                {{ form.confirm_password(class="form-control") }}
                 {% if form.confirm_password.errors %}
                     {% for error in form.confirm_password.errors %}
                         <div>{{ error }}</div>
                     {% endfor %}
                 {% endif %}
             </div>
-            {{ form.submit }}
+            <div class="text-center">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
         </form>
+        </div>
     </div>
 {% endblock %}

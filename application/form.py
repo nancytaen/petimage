@@ -14,6 +14,6 @@ class UserRegistrationForm(Form):
 
 # form for user login
 class UserLoginForm(Form):
-    email = StringField('Email', validators=[validators.DataRequired()])
+    email = StringField('Email Address', validators=[validators.DataRequired()])
     password = PasswordField('Password', validators=[validators.DataRequired()])
     submit = SubmitField('Login')

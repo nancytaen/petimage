@@ -5,5 +5,8 @@
 *.pyc
 *.pycache
 
-# environment variable file
+# environment file
 venv
+
+#environment variable file
+.flaskenv

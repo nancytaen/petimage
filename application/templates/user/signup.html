@@ -4,6 +4,9 @@
     <div>
         <h2 class="title">Contact</h2>
         <form method="POST" action="/signup">
+            {% for message in get_flashed_messages() %}
+                <div>{{ message }}</div>
+            {% endfor %}
             <div class="form-field">{{ form.email.label }} {{ form.email }}
                 {% if form.email.errors %}
                     {% for error in form.email.errors %}

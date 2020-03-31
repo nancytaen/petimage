@@ -12,7 +12,8 @@ def signup():
     if request.method == 'POST':
         if signup_form.validate():
             print("success")
-            return redirect(url_for('user.login'))
+            flash("User already exists.")
+            # return redirect(url_for('user.login'))
     return render_template('user/signup.html', title="sign up",
                            description="create new account", nav=top_level_nav(), form=signup_form)
 

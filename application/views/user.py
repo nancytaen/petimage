@@ -15,7 +15,7 @@ def signup():
             flash("User already exists.")
             # return redirect(url_for('user.login'))
     return render_template('user/signup.html', title="Create Account",
-                           description="create new account", nav=top_level_nav(), form=signup_form)
+                           description="create new account", nav=top_level_nav(signup=True), form=signup_form)
 
 
 @user.route('/login', methods=['GET', 'POST'])
@@ -25,5 +25,5 @@ def login():
         if login_form.validate():
             print("success")
         flash("User does not exist")
-    return render_template('user/login.html', title="login",
-                           description="Login", nav=top_level_nav(), form=login_form)
+    return render_template('user/login.html', title="Login",
+                           description="Login", nav=top_level_nav(login=True), form=login_form)

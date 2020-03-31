@@ -1,5 +1,4 @@
-def top_level_nav():
-    return [{'name': 'Petimage', 'url': '/top'},
-            {'name': 'Signup', 'url': '/signup'},
-            {'name': 'Login', 'url': '/login'}
+def top_level_nav(login=False, signup=False):
+    return [{'name': 'Create Account', 'url': '/signup', 'status': signup},
+            {'name': 'Login', 'url': '/login', 'status': login}
             ]

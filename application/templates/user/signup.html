@@ -4,16 +4,17 @@
     <div>
         <h2 class="text-center">{{ title }}</h2>
         <div class="card col-sm-6 mx-auto">
-        <form method="POST" action="/signup">
+        <form method="POST" action="/signup" novalidate>
             {% for message in get_flashed_messages() %}
-                <div>{{ message }}</div>
+                <div class="alert alert-dark" role="alert">{{ message }}</div>
             {% endfor %}
             <div class="form-group">
                 <label for="email">{{ form.email.label }} </label>
                 {{ form.email(class="form-control") }}
                 {% if form.email.errors %}
                     {% for error in form.email.errors %}
-                        <div>{{ error }}</div>
+{#                        TODO error-message class in css#}
+                        <span class="error-message text-danger">{{ error }}</span>
                     {% endfor %}
                 {% endif %}
             </div>
@@ -22,7 +23,7 @@
                 {{ form.password(class="form-control") }}
                 {% if form.password.errors %}
                     {% for error in form.password.errors %}
-                        <div>{{ error }}</div>
+                        <span class="error-message text-danger">{{ error }}</span>
                     {% endfor %}
                 {% endif %}
             </div>
@@ -31,7 +32,7 @@
                 {{ form.confirm_password(class="form-control") }}
                 {% if form.confirm_password.errors %}
                     {% for error in form.confirm_password.errors %}
-                        <div>{{ error }}</div>
+                        <span class="error-message text-danger">{{ error }}</span>
                     {% endfor %}
                 {% endif %}
             </div>

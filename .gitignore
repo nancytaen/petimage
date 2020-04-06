@@ -10,3 +10,4 @@ venv
 
 #environment variable file
 .flaskenv
+.ssh/

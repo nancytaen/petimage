@@ -1,18 +1,18 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 
-from application.model.base import db_session
 from application.form import UserRegistrationForm, UserLoginForm
 from application.navigation import top_level_nav
+from application.api.user import api_signup
 
 user = Blueprint('user', __name__, template_folder='templates', static_folder='static')
 
 
 @user.route('/signup', methods=['GET', 'POST'])
 def signup():
-    session = db_session()
     signup_form = UserRegistrationForm(request.form)
     if request.method == 'POST':
         if signup_form.validate():
+            api_signup(signup_form)
             print("success")
             flash("User already exists.")
             # return redirect(url_for('user.login'))

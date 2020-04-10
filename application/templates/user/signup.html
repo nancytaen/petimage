@@ -9,7 +9,7 @@
                 <div class="alert alert-dark" role="alert">{{ message }}</div>
             {% endfor %}
             <div class="form-group">
-                <label for="email">{{ form.email.label }} </label>
+                <label for="email">{{ form.email.description }} </label>
                 {{ form.email(class="form-control") }}
                 {% if form.email.errors %}
                     {% for error in form.email.errors %}
@@ -19,7 +19,7 @@
                 {% endif %}
             </div>
             <div class="form-group">
-                <label for="password">{{ form.password.label }} </label>
+                <label for="password">{{ form.password.description }} </label>
                 {{ form.password(class="form-control") }}
                 {% if form.password.errors %}
                     {% for error in form.password.errors %}
@@ -28,7 +28,7 @@
                 {% endif %}
             </div>
             <div class="form-group">
-                <label for="confirm_password"> {{ form.confirm_password.label }} </label>
+                <label for="confirm_password"> {{ form.confirm_password.description }} </label>
                 {{ form.confirm_password(class="form-control") }}
                 {% if form.confirm_password.errors %}
                     {% for error in form.confirm_password.errors %}

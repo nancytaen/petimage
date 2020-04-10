@@ -3,4 +3,4 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 # TODO alembic
 Base = declarative_base()
-db_session = scoped_session(sessionmaker(autoflush=False))
+Session = scoped_session(sessionmaker(autoflush=False))

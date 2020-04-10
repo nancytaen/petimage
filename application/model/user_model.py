@@ -19,7 +19,6 @@ class User(Base):
     def __init__(self, email, password):
         self.email = email
         self.password = generate_password_hash(password)
-        print("initiated$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
     # check password
     def authenticate_password(self, check_password):

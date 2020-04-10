@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for, flash
+from flask import Blueprint, request, render_template, redirect, url_for, flash, session
 
 from application.form import UserRegistrationForm, UserLoginForm
 from application.navigation import top_level_nav
@@ -31,7 +31,13 @@ def login():
             if message != UserMessage.LOGIN_SUCCESS:
                 flash(message)
             else:
-                print("success")
                 flash("Success")
     return render_template('user/login.html', title="Login",
                            description="Login", nav=top_level_nav(login=True), form=login_form)
+
+
+@user.route('/logout', methods=['GET'])
+def logout():
+    session['logged_in'] = False
+    session['user_id'] = None
+    return redirect(url_for('top_page'))

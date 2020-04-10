@@ -1,14 +1,14 @@
 from sqlalchemy import create_engine
 
-from application.model.base import db_session
+from application.model.base import Session
 from application.model.user_model import *
 from config import configObject
 
 
 try:
     engine = create_engine(configObject.DATABASE_URI, convert_unicode=True, echo=False)
-    db_session.configure(bind=engine)
-    Base.query = db_session.query_property()
+    Session.configure(bind=engine)
+    Base.query = Session.query_property()
 
 except Exception as e:
     print("Database Connection Error")

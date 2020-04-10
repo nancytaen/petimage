@@ -4,6 +4,7 @@ from application.form import UserRegistrationForm, UserLoginForm
 from application.navigation import top_level_nav
 from application.api.user import signup_api, login_api
 from application.message import UserMessage
+from application.decorators import login_required
 
 user = Blueprint('user', __name__, template_folder='templates', static_folder='static')
 
@@ -37,6 +38,7 @@ def login():
 
 
 @user.route('/logout', methods=['GET'])
+@login_required
 def logout():
     session['logged_in'] = False
     session['user_id'] = None

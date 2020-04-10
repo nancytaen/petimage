@@ -14,7 +14,7 @@ class User(Base):
     email = Column(String(30), nullable=False, unique=True)
     password = Column(String(128), nullable=False)
     is_deleted = Column(Boolean, nullable=False, default=False)
-:
+
     # for creating User instance
     def __init__(self, email, password):
         self.email = email

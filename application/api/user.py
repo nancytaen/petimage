@@ -6,7 +6,6 @@ from application.message import UserMessage
 
 def api_signup(signup_form):
     session = db_session()
-    print(signup_form)
     # check if email is used
     if find_existing_user(signup_form.email.data, session) is not False:
         return signup_form.email.data + UserMessage.USER_EXISTS

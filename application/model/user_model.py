@@ -19,11 +19,11 @@ class User(Base):
     def __init__(self, email, password):
         self.email = email
         self.password = generate_password_hash(password)
+        print("initiated$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
     # check password
-    def authenticate_password(self, password):
-        hashed = generate_password_hash(password)
-        if check_password_hash(hashed, self.password):
+    def authenticate_password(self, check_password):
+        if check_password_hash(self.password, check_password):
             return True
         else:
             return False

@@ -3,6 +3,7 @@ from flask import Blueprint, request, render_template, redirect, url_for, flash
 from application.form import UserRegistrationForm, UserLoginForm
 from application.navigation import top_level_nav
 from application.api.user import api_signup
+from application.message import UserMessage
 
 user = Blueprint('user', __name__, template_folder='templates', static_folder='static')
 
@@ -12,10 +13,11 @@ def signup():
     signup_form = UserRegistrationForm(request.form)
     if request.method == 'POST':
         if signup_form.validate():
-            api_signup(signup_form)
-            print("success")
-            flash("User already exists.")
-            # return redirect(url_for('user.login'))
+            message = api_signup(signup_form)
+            if message != UserMessage.SIGNUP_SUCCESS:
+                flash(message)
+            else:
+                return redirect(url_for('user.login'))
     return render_template('user/signup.html', title="Create Account",
                            description="create new account", nav=top_level_nav(signup=True), form=signup_form)
 

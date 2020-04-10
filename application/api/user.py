@@ -9,7 +9,7 @@ def api_signup(signup_form):
     print(signup_form)
     # check if email is used
     if find_existing_user(signup_form.email.data, session) is not False:
-        return UserMessage.USER_EXISTS
+        return signup_form.email.data + UserMessage.USER_EXISTS
 
     # insert into db
     session.add(User(signup_form.email.data, signup_form.password.data))

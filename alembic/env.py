@@ -1,3 +1,4 @@
+import sys
 import os
 
 from logging.config import fileConfig
@@ -8,7 +9,9 @@ from sqlalchemy import create_engine
 from alembic import context
 
 # load env file
-dotenv_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)), ".flaskenv")
+project_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+sys.path.insert(0, project_dir)
+dotenv_path = os.path.join(project_dir, ".flaskenv")
 load_dotenv(dotenv_path)
 
 
@@ -27,9 +30,9 @@ fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-target_metadata = None
+from application.model import base
+target_metadata = base.Base.metadata
+# target_metadata = None
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

@@ -27,7 +27,7 @@ def login_api(login_form):
     if matched_user.authenticate_password(login_form.password.data) is False:
         return UserMessage.EMAIL_PASSWORD_NOT_MATCH
     session['logged_in'] = True
-    session['user_id'] = matched_user.id
+    session['user_id'] = matched_user.user_id
     return UserMessage.LOGIN_SUCCESS
 
 

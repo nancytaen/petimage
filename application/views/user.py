@@ -18,6 +18,7 @@ def signup():
             if message != UserMessage.SIGNUP_SUCCESS:
                 flash(message)
             else:
+                flash("Account has been created")
                 return redirect(url_for('user.login'))
     return render_template('user/signup.html', title="Create Account",
                            description="create new account", nav=top_level_nav(signup=True), form=signup_form)

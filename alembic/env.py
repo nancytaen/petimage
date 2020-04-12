@@ -52,7 +52,7 @@ def run_migrations_offline():
     script output.
 
     """
-    url = os.environ.get(get_db_url())
+    url = get_db_url()
     context.configure(
         url=url,
         target_metadata=target_metadata,

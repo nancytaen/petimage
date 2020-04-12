@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine
 
-from application.model.base import Session
-from application.model.user_model import *
+from application.model.base import Session, Base
 from config import configObject
 
 

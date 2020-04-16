@@ -7,12 +7,14 @@ from application.message import UserMessage
 
 def signup_api(signup_form):
     db_session = Session()
-    # check if email is used
-    if find_existing_user(signup_form.email.data, db_session) is not False:
+    if find_existing_user(signup_form.email.data, db_session) is True:
+        # if email is used, return error
         return signup_form.email.data + UserMessage.USER_EXISTS
 
     # insert into db
-    db_session.add(User(signup_form.email.data, signup_form.password.data))
+    new_user = User(signup_form.email.data, signup_form.password.data)
+    new_user.set_unique_username(db_session)
+    db_session.add(new_user)
     db_session.commit()
     db_session.close()
 
@@ -28,6 +30,7 @@ def login_api(login_form):
         return UserMessage.EMAIL_PASSWORD_NOT_MATCH
     session['logged_in'] = True
     session['user_id'] = matched_user.user_id
+    session['username'] = matched_user.username
     return UserMessage.LOGIN_SUCCESS
 
 

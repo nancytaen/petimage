@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
+import re
+
+from sqlalchemy import Column, Integer, SmallInteger, String, DateTime, Boolean
 from sqlalchemy.sql import func
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -12,7 +14,9 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), nullable=False, default=func.now())
     updated_at = Column(DateTime(timezone=True), nullable=False, default=func.now(), onupdate=func.now())
     email = Column(String(30), nullable=False, unique=True)
+    username = Column(String(30), nullable=False, unique=True)
     password = Column(String(128), nullable=False)
+    name_idx = Column(SmallInteger, nullable=False, default=0)
     is_deleted = Column(Boolean, nullable=False, default=False)
 
     # for creating User instance
@@ -26,3 +30,11 @@ class User(Base):
             return True
         else:
             return False
+
+    def set_unique_username(self, db_session):
+        self.username = re.split('[.@]', self.email)[0]
+        existing_username = db_session.query(User).filter(User.username == self.username).one_or_none()
+        if existing_username is None:
+            return
+        self.username += str(existing_username.name_idx)
+        existing_username.name_idx += existing_username.name_idx

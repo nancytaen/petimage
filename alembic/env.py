@@ -16,7 +16,7 @@ load_dotenv(dotenv_path)
 
 
 # get DB url
-from config import configObject
+from config import Config
 
 
 # this is the Alembic Config object, which provides
@@ -51,7 +51,7 @@ def run_migrations_offline():
     script output.
 
     """
-    url = configObject.DATABASE_URI
+    url = Config.DATABASE_URI
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -70,7 +70,7 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    connectable = create_engine(configObject.DATABASE_URI)
+    connectable = create_engine(Config.DATABASE_URI)
 
     with connectable.connect() as connection:
         context.configure(

@@ -3,17 +3,7 @@ import os
 
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY")
+    DATABASE_URI = os.environ.get("DATABASE_URI")
 
-
-class DevelopmentConfig(Config):
-    DATABASE_URI = os.environ.get("DEV_DATABASE_URI")
-
-
-class ProductionConfig(Config):
-    DATABASE_URI = os.environ.get("PROD_DATABASE_URI")
-
-
-if os.environ.get("FLASK_ENV") == 'production':
-    configObject = ProductionConfig
-else:
-    configObject = DevelopmentConfig
+    SMTP_MAIL_ADDR = os.environ.get("SMTP_MAIL_ADDR")
+    SMTP_MAIL_PWD = os.environ.get("SMTP_MAIL_PWD")

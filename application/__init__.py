@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from flask_cors import CORS
 
-from config import configObject
+from config import Config
 from application.model.model import init_db
 from application.views.user import user
 from application.navigation import top_level_nav
@@ -10,7 +10,7 @@ from application.navigation import top_level_nav
 def create_app():
     # instantiate the app
     app = Flask(__name__, template_folder="templates", static_folder="static")
-    app.config.from_object(configObject)
+    app.config.from_object(Config)
 
     # enable CORS
     CORS(app, resources={r'/*': {'origins': '*'}})

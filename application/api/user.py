@@ -6,8 +6,13 @@ from application.message import UserMessage
 
 
 def signup_api(signup_form):
+    """
+    api that registers new users
+    :param signup_form: WTForm filled form
+    :return: an appropriate success or failure message from message.py
+    """
     db_session = Session()
-    if find_existing_user(signup_form.email.data, db_session) is not False:
+    if find_existing_user(signup_form.email.data, db_session) is not None:
         # if email is used, return error
         return signup_form.email.data + UserMessage.USER_EXISTS
 
@@ -22,9 +27,14 @@ def signup_api(signup_form):
 
 
 def login_api(login_form):
+    """
+    api that logs a user in. if successful, adds user info to flask session
+    :param login_form: WTForm login filled in
+    :return: an appropriate success/failure message from message.py
+    """
     db_session = Session()
     matched_user = find_existing_user(login_form.email.data, db_session)
-    if matched_user is False:
+    if matched_user is None:
         return UserMessage.EMAIL_PASSWORD_NOT_MATCH
     if matched_user.authenticate_password(login_form.password.data) is False:
         return UserMessage.EMAIL_PASSWORD_NOT_MATCH
@@ -35,8 +45,12 @@ def login_api(login_form):
 
 
 def find_existing_user(email, db_session):
-    existing_user = db_session.query(User).filter(User.email == email).first()
-    if existing_user is None:
-        return False
+    """
+    finds an existing user based on email in db
+    :param email:
+    :param db_session: sqlalchemy session
+    :return: user object if a user is found, None otherwise
+    """
+    existing_user = db_session.query(User).filter(User.email == email).one_or_none()
     return existing_user
 

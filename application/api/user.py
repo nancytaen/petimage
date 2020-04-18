@@ -1,9 +1,11 @@
+from datetime import datetime, timedelta
+
 from flask import session
 
 from application.model.base import Session
-from application.model.users import User
-from application.model.tokens import Token, TokenType
-from application.message import UserMessage
+from application.model.users import User, UserStatus
+from application.model.tokens import Token, TokenType, TokenStatus
+from application.message import UserMessage, TokenMessage
 from application.send_mail import send_mail
 from config import Config
 
@@ -67,15 +69,43 @@ def find_existing_user(email, db_session):
 
 
 def send_user_verif_email(username, user_email, verif_token):
+    """
+    sends an email to newly registered user
+    :return: EMAIL_ERROR message if email could not be sent
+    """
     subject = "Welcome to Petimage!"
-    verif_url = Config.ROOT_URL + "api/email_verif/" + verif_token
+    verif_url = Config.ROOT_URL + "api/email_verif/" + user_email + "/" + verif_token
     text_body = "Dear {},\n\n" \
                 "Thank you for joining petimage! \n\n" \
                 "To complete your registration, please verify your email by following the link below.\n" \
                 "{}\n" \
                 "This link expires in 24 hours.\n\n" \
+                "You can request another verification within 7 days. \n" \
                 "If you did not register for petimage, please disregard this email.\n" \
                 "For further inqueries, please contact {}.".format(username, verif_url, Config.SMTP_MAIL_ADDR)
     if send_mail(user_email, subject, text_body) is False:
         return UserMessage.EMAIL_ERROR
 
+
+def verify_token_url(email, token):
+    db_session = Session()
+    user_obj, token_obj = db_session.query(User, Token).filter(
+        User.email == email, User.user_status == UserStatus.temporary).filter(
+        Token.user_id == User.user_id, Token.token_status == TokenStatus.pending).one_or_none()
+
+    # token/user exists?
+    if token_obj is None or user_obj is None:
+        return TokenMessage.TOKEN_NOT_FOUND
+    # token expired?
+    if (datetime.now() - timedelta(hours=24)) > token_obj.created_at:
+        return TokenMessage.TOKEN_EXPIRED
+    # token correct?
+    if token_obj.verify_token(token) is False:
+        return TokenMessage.TOKEN_INCORRECT
+
+    # update token status and user status
+    token_obj.token_status = TokenStatus.verified
+    user_obj.user_status = UserStatus.active
+    db_session.commit()
+    db_session.close()
+    return TokenMessage.VERIFY_SUCCESS

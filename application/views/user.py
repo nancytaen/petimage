@@ -2,7 +2,7 @@ from flask import Blueprint, request, render_template, redirect, url_for, flash,
 
 from application.form import UserRegistrationForm, UserLoginForm
 from application.navigation import top_level_nav
-from application.api.user import signup_api, login_api
+from application.api.user import signup_api, login_api, verify_token_url
 from application.message import UserMessage
 from application.decorators import login_required
 
@@ -46,7 +46,8 @@ def logout():
     return redirect(url_for('top_page'))
 
 
-@user.route('/api/email_verif/<token>', methods=['GET'])
-def verify_email_token(token):
+@user.route('/api/email_verif/<email>/<token>', methods=['GET'])
+def verify_email_token(email, token):
+    print(verify_token_url(email, token))
     flash("Email has been confirmed!")
     return redirect(url_for('user.login'))

@@ -6,6 +6,14 @@ from config import Config
 
 
 def send_mail(to_addr, subject, text=None, html=None):
+    """
+    sends an email using smtp
+    :param to_addr: the address to send to
+    :param subject: subject of email
+    :param text: text body
+    :param html: html body
+    :return: False if email could not be sent
+    """
     msg = MIMEMultipart("alternative")
     msg["From"] = Config.SMTP_MAIL_ADDR
     msg["To"] = to_addr

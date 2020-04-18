@@ -1,5 +1,8 @@
 import re
 import enum
+import secrets
+import hashlib
+from datetime import datetime
 
 from sqlalchemy import Column, Integer, SmallInteger, String, DateTime, Enum
 from sqlalchemy.sql import func
@@ -45,7 +48,12 @@ class User(Base):
     def set_unique_username(self, db_session):
         self.username = re.split('[.@]', self.email)[0]
         existing_username = db_session.query(User).filter(User.username == self.username).one_or_none()
-        if existing_username is None:
-            return
-        self.username += str(existing_username.name_idx)
-        existing_username.name_idx = existing_username.name_idx + 1
+        if existing_username:
+            self.username += str(existing_username.name_idx)
+            existing_username.name_idx = existing_username.name_idx + 1
+        return self.username
+
+    def generate_verif_token(self, token_type):
+        raw_token = hashlib.sha256((token_type + secrets.token_urlsafe(20)
+                                    + self.username + self.email + str(datetime.now())).encode()).hexdigest()
+        return raw_token

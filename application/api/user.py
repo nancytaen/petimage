@@ -88,10 +88,17 @@ def send_user_verif_email(username, user_email, verif_token):
 
 
 def verify_token_url(email, token):
+    """
+    verify a token and updates appropriate table
+    :param email: email of user
+    :param token: token
+    :return: appropriate success/fail message of class TokenMessage
+    """
     db_session = Session()
     user_obj, token_obj = db_session.query(User, Token).filter(
         User.email == email, User.user_status == UserStatus.temporary).filter(
-        Token.user_id == User.user_id, Token.token_status == TokenStatus.pending).one_or_none()
+        Token.user_id == User.user_id, Token.token_status == TokenStatus.pending,
+        Token.token_type == TokenType.email_verify).one_or_none()
 
     # token/user exists?
     if token_obj is None or user_obj is None:

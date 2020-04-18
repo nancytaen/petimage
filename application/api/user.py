@@ -1,13 +1,13 @@
 from flask import session
 
 from application.model.base import Session
-from application.model.user_model import User
+from application.model.users import User
 from application.message import UserMessage
 
 
 def signup_api(signup_form):
     db_session = Session()
-    if find_existing_user(signup_form.email.data, db_session) is True:
+    if find_existing_user(signup_form.email.data, db_session) is not False:
         # if email is used, return error
         return signup_form.email.data + UserMessage.USER_EXISTS
 

@@ -11,22 +11,10 @@ def send_mail(to_addr, subject, text=None, html=None):
     msg["To"] = to_addr
     msg["Subject"] = subject
 
-    text = """
-    This is testing!!!
-    www.petimage.com
-    """
-    html = """
-    <html>
-    <body>
-    <h1>Test!</h1><br>TEST!!!!</br>
-    <a href="www.gmail.com">Gmail!</a>
-    </p>
-    <body>
-    <html>
-    """
-
-    msg.attach(MIMEText(text, "plain"))
-    msg.attach(MIMEText(html, "html"))
+    if text:
+        msg.attach(MIMEText(text, "plain"))
+    if html:
+        msg.attach(MIMEText(html, "html"))
 
     try:
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)

@@ -18,7 +18,7 @@ def signup():
             if message != UserMessage.SIGNUP_SUCCESS:
                 flash(message)
             else:
-                flash("Account has been created")
+                flash("Please verify the link sent to your email before proceeding.")
                 return redirect(url_for('user.login'))
     return render_template('user/signup.html', title="Create Account",
                            description="create new account", nav=top_level_nav(signup=True), form=signup_form)
@@ -48,7 +48,5 @@ def logout():
 
 @user.route('/api/email_verif/<token>', methods=['GET'])
 def verify_email_token(token):
-    print("here!!!")
-    print(token)
-    flash("Link followed!")
+    flash("Email has been confirmed!")
     return redirect(url_for('user.login'))

@@ -28,11 +28,11 @@ def signup_api(signup_form):
     verif_token = new_user.generate_verif_token("email_verification")
     new_token = Token(verif_token, TokenType.email_verify, new_user.user_id)
     db_session.add(new_token)
-    # db_session.commit()
-    db_session.close()
-
     # email user
-    send_user_verif_email(new_username, signup_form.email.data, verif_token)
+    if send_user_verif_email(new_username, signup_form.email.data, verif_token) == UserMessage.EMAIL_ERROR:
+        return UserMessage.EMAIL_ERROR
+    db_session.commit()
+    db_session.close()
 
     return UserMessage.SIGNUP_SUCCESS
 
@@ -76,5 +76,6 @@ def send_user_verif_email(username, user_email, verif_token):
                 "This link expires in 24 hours.\n\n" \
                 "If you did not register for petimage, please disregard this email.\n" \
                 "For further inqueries, please contact {}.".format(username, verif_url, Config.SMTP_MAIL_ADDR)
-    send_mail(user_email, subject, text_body)
+    if send_mail(user_email, subject, text_body) is False:
+        return UserMessage.EMAIL_ERROR
 

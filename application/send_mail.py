@@ -24,3 +24,4 @@ def send_mail(to_addr, subject, text=None, html=None):
     except Exception as e:
         print(e)
         print("Something went wrong")
+        return False

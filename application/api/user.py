@@ -95,10 +95,15 @@ def verify_token_url(email, token):
     :return: appropriate success/fail message of class TokenMessage
     """
     db_session = Session()
-    user_obj, token_obj = db_session.query(User, Token).filter(
+    db_obj = db_session.query(User, Token).filter(
         User.email == email, User.user_status == UserStatus.temporary).filter(
         Token.user_id == User.user_id, Token.token_status == TokenStatus.pending,
         Token.token_type == TokenType.email_verify).one_or_none()
+    if db_obj is None:
+        return TokenMessage.TOKEN_NOT_FOUND
+
+    user_obj = db_obj[0]
+    token_obj = db_obj[1]
 
     # token/user exists?
     if token_obj is None or user_obj is None:

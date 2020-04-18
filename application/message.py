@@ -9,6 +9,6 @@ class UserMessage:
 
 class TokenMessage:
     VERIFY_SUCCESS = 0
-    TOKEN_NOT_FOUND = "The url has expired. Please register again."
+    TOKEN_NOT_FOUND = "The url is invalid or has already been used."
     TOKEN_EXPIRED = "The link has expired. "
     TOKEN_INCORRECT = "The token is incorrect."

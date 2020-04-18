@@ -2,7 +2,10 @@ from flask import session
 
 from application.model.base import Session
 from application.model.users import User
+from application.model.tokens import Token, TokenType
 from application.message import UserMessage
+from application.send_mail import send_mail
+from config import Config
 
 
 def signup_api(signup_form):
@@ -18,10 +21,18 @@ def signup_api(signup_form):
 
     # insert into db
     new_user = User(signup_form.email.data, signup_form.password.data)
-    new_user.set_unique_username(db_session)
+    new_username = new_user.set_unique_username(db_session)
     db_session.add(new_user)
-    db_session.commit()
+    db_session.flush()
+    # email verification token
+    verif_token = new_user.generate_verif_token("email_verification")
+    new_token = Token(verif_token, TokenType.email_verify, new_user.user_id)
+    db_session.add(new_token)
+    # db_session.commit()
     db_session.close()
+
+    # email user
+    send_user_verif_email(new_username, signup_form.email.data, verif_token)
 
     return UserMessage.SIGNUP_SUCCESS
 
@@ -53,4 +64,18 @@ def find_existing_user(email, db_session):
     """
     existing_user = db_session.query(User).filter(User.email == email).one_or_none()
     return existing_user
+
+
+def send_user_verif_email(username, user_email, verif_token):
+    subject = "Welcome to Petimage!"
+    print(verif_token)
+    verif_url = "" + verif_token
+    text_body = "Dear {},\n\n" \
+                "Thank you for joining petimage! \n\n" \
+                "To complete your registration, please verify your email by following the link below.\n" \
+                "{}\n" \
+                "This link expires in 24 hours.\n\n" \
+                "If you did not register for petimage, please disregard this email.\n" \
+                "For further inqueries, please contact {}.".format(username, verif_url, Config.SMTP_MAIL_ADDR)
+    send_mail(user_email, subject, text_body)
 

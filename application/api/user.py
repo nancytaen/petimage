@@ -17,7 +17,8 @@ def signup_api(signup_form):
     :return: an appropriate success or failure message from message.py
     """
     db_session = Session()
-    if find_existing_user(signup_form.email.data, db_session) is not None:
+    if db_session.query(User).filter(User.email == signup_form.email.data,
+                                     User.user_status != UserStatus.deleted).one_or_none() is not None:
         # if email is used, return error
         return signup_form.email.data + UserMessage.USER_EXISTS
 
@@ -46,7 +47,8 @@ def login_api(login_form):
     :return: an appropriate success/failure message from message.py
     """
     db_session = Session()
-    matched_user = find_existing_user(login_form.email.data, db_session)
+    matched_user = db_session.query(User).filter(User.email == login_form.email.data,
+                                                 User.user_status == UserStatus.active).one_or_none()
     if matched_user is None:
         return UserMessage.EMAIL_PASSWORD_NOT_MATCH
     if matched_user.authenticate_password(login_form.password.data) is False:
@@ -55,17 +57,6 @@ def login_api(login_form):
     session['user_id'] = matched_user.user_id
     session['username'] = matched_user.username
     return UserMessage.LOGIN_SUCCESS
-
-
-def find_existing_user(email, db_session):
-    """
-    finds an existing user based on email in db
-    :param email:
-    :param db_session: sqlalchemy session
-    :return: user object if a user is found, None otherwise
-    """
-    existing_user = db_session.query(User).filter(User.email == email).one_or_none()
-    return existing_user
 
 
 def send_user_verif_email(username, user_email, verif_token):

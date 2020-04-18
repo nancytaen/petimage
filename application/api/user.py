@@ -28,7 +28,7 @@ def signup_api(signup_form):
     verif_token = new_user.generate_verif_token("email_verification")
     new_token = Token(verif_token, TokenType.email_verify, new_user.user_id)
     db_session.add(new_token)
-    db_session.commit()
+    # db_session.commit()
     db_session.close()
 
     # email user
@@ -68,7 +68,7 @@ def find_existing_user(email, db_session):
 
 def send_user_verif_email(username, user_email, verif_token):
     subject = "Welcome to Petimage!"
-    verif_url = Config.ROOT_URL + verif_token
+    verif_url = Config.ROOT_URL + "api/email_verif/" + verif_token
     text_body = "Dear {},\n\n" \
                 "Thank you for joining petimage! \n\n" \
                 "To complete your registration, please verify your email by following the link below.\n" \

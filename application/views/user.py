@@ -44,3 +44,11 @@ def logout():
     session['logged_in'] = False
     session['user_id'] = None
     return redirect(url_for('top_page'))
+
+
+@user.route('/api/email_verif/<token>', methods=['GET'])
+def verify_email_token(token):
+    print("here!!!")
+    print(token)
+    flash("Link followed!")
+    return redirect(url_for('user.login'))

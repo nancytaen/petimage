@@ -19,7 +19,6 @@ def signup():
                 flash(message)
             else:
                 flash("Please verify the link sent to your email before proceeding.")
-                return redirect(url_for('user.login'))
     return render_template('user/signup.html', title="Create Account",
                            description="create new account", nav=top_level_nav(signup=True), form=signup_form)
 

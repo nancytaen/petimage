@@ -1,10 +1,17 @@
 import re
+import enum
 
-from sqlalchemy import Column, Integer, SmallInteger, String, DateTime, Boolean
+from sqlalchemy import Column, Integer, SmallInteger, String, DateTime, Enum
 from sqlalchemy.sql import func
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from application.model.base import Base
+
+
+class UserStatus(enum.Enum):
+    temporary = 0
+    active = 1
+    deleted = 2
 
 
 class User(Base):
@@ -16,8 +23,9 @@ class User(Base):
     email = Column(String(30), nullable=False, unique=True)
     username = Column(String(30), nullable=False, unique=True)
     password = Column(String(128), nullable=False)
+    profile_img_url = Column(String(128))
     name_idx = Column(SmallInteger, nullable=False, default=0)
-    is_deleted = Column(Boolean, nullable=False, default=False)
+    user_status = Column(Enum(UserStatus), default=UserStatus.temporary)
 
     # for creating User instance
     def __init__(self, email, password):

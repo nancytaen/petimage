@@ -3,6 +3,7 @@ import enum
 
 from sqlalchemy import Column, Integer, SmallInteger, String, DateTime, Enum
 from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from application.model.base import Base
@@ -15,7 +16,7 @@ class UserStatus(enum.Enum):
 
 
 class User(Base):
-    __tablename__ = 'users'
+    __tablename__ = 'user'
 
     user_id = Column(Integer, primary_key=True, autoincrement=True)
     created_at = Column(DateTime(timezone=True), nullable=False, default=func.now())
@@ -26,6 +27,8 @@ class User(Base):
     profile_img_url = Column(String(128))
     name_idx = Column(SmallInteger, nullable=False, default=0)
     user_status = Column(Enum(UserStatus), default=UserStatus.temporary)
+
+    token = relationship("Token", backref="user")
 
     # for creating User instance
     def __init__(self, email, password):
@@ -45,4 +48,4 @@ class User(Base):
         if existing_username is None:
             return
         self.username += str(existing_username.name_idx)
-        existing_username.name_idx += existing_username.name_idx
+        existing_username.name_idx = existing_username.name_idx + 1

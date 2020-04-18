@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 
 from application.model.base import Session, Base
+from application.model.tokens import *
 from config import Config
 
 

@@ -9,6 +9,7 @@ from application.decorators import login_required
 user = Blueprint('user', __name__, template_folder='templates', static_folder='static')
 
 
+# create account page & function
 @user.route('/signup', methods=['GET', 'POST'])
 def signup():
     signup_form = UserRegistrationForm(request.form)
@@ -23,6 +24,7 @@ def signup():
                            description="create new account", nav=top_level_nav(signup=True), form=signup_form)
 
 
+# login page & function
 @user.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = UserLoginForm(request.form)
@@ -37,11 +39,13 @@ def login():
                            description="Login", nav=top_level_nav(login=True), form=login_form)
 
 
+# logout function
 @user.route('/logout', methods=['GET'])
 @login_required
 def logout():
     session['logged_in'] = False
     session['user_id'] = None
+    session['username'] = None
     return redirect(url_for('top_page'))
 
 

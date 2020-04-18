@@ -7,3 +7,4 @@ class Config:
 
     SMTP_MAIL_ADDR = os.environ.get("SMTP_MAIL_ADDR")
     SMTP_MAIL_PWD = os.environ.get("SMTP_MAIL_PWD")
+    ROOT_URL = os.environ.get("ROOT_URL")

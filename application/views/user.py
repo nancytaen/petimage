@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, session
 
 from application.form import UserRegistrationForm, UserLoginForm
-from application.navigation import top_level_nav
+from application.navigation import top_level_nav, logged_in_user, logged_in_nav
 from application.api.user import signup_api, login_api, verify_token_url
 from application.message import UserMessage, TokenMessage
 from application.decorators import login_required
@@ -57,3 +57,11 @@ def verify_email_token(email, token):
     else:
         flash(result)
     return redirect(url_for('user.login'))
+
+
+# account detail page
+@user.route('/user/account')
+@login_required
+def account_page():
+    return render_template('user/account.html', title="Account", description="Account Detail",
+                           nav=logged_in_nav(), user=logged_in_user())

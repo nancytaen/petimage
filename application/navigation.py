@@ -24,5 +24,6 @@ def logged_in_nav(feed=False):
 
 
 def logged_in_user():
-    return {'username': session['username']
+    return {'username': session['username'],
+            'url': '/user/account'
             }

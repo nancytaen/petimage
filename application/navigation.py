@@ -1,3 +1,6 @@
+from flask import session
+
+
 def top_level_nav(login=False, signup=False):
     """
     returns a list of pages to be displayed on navigation bar
@@ -11,9 +14,15 @@ def top_level_nav(login=False, signup=False):
             ]
 
 
-def logged_in_nav():
+def logged_in_nav(feed=False):
     """
     navigation bar content for logged in pages
     :return:
     """
-    return [{'name': 'Logout', 'url': '/logout', 'status': False}]
+    return [{'name': 'My Feed', 'url': '/post/feed', 'status': feed},
+            {'name': 'Logout', 'url': '/logout', 'status': False}]
+
+
+def logged_in_user():
+    return {'username': session['username']
+            }

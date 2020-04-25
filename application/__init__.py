@@ -3,7 +3,7 @@ from flask_cors import CORS
 
 from config import Config
 from application.model.model import init_db
-from application.views.user import user
+from application.views import user, post
 from application.navigation import top_level_nav
 
 
@@ -17,7 +17,8 @@ def create_app():
 
     # register blueprints
     with app.app_context():
-        app.register_blueprint(user)
+        app.register_blueprint(user.user)
+        app.register_blueprint(post.post)
 
     @app.route('/')
     @app.route('/top')

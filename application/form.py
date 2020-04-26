@@ -1,4 +1,4 @@
-from wtforms import Form, SubmitField, StringField, PasswordField, validators
+from wtforms import Form, SubmitField, StringField, PasswordField, FileField, validators
 
 
 # form for user registration
@@ -17,3 +17,9 @@ class UserLoginForm(Form):
     email = StringField('Email Address', validators=[validators.DataRequired()])
     password = PasswordField('Password', validators=[validators.DataRequired()])
     submit = SubmitField('Login')
+
+
+class UserAccountForm(Form):
+    email = StringField('email', description="Email", validators=[validators.DataRequired])
+    username = StringField('username', description="Username", validators=[validators.DataRequired()])
+    profile_img_url = FileField('profile_img_url', description='Profile Image')

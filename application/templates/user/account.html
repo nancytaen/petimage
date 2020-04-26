@@ -2,4 +2,53 @@
 
 {% block content %}
 
+        <div class="card col-sm-6 mx-auto">
+        <form id="account_form" method="POST" novalidate>
+            {% for message in get_flashed_messages() %}
+                <div class="alert alert-dark" role="alert">{{ message }}</div>
+            {% endfor %}
+            <div class="form-group">
+                <label for="email">{{ form.email.description }} </label>
+                {{ form.email(class="form-control") }}
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+{#                        TODO error-message class in css#}
+                        <span class="error-message text-danger">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="username">{{ form.username.description }} </label>
+                {{ form.username(class="form-control") }}
+                {% if form.username.errors %}
+                    {% for error in form.username.errors %}
+{#                        TODO error-message class in css#}
+                        <span class="error-message text-danger">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <div>
+                <img id="preview" height="50" width="50" src="{% if form.profile_img_url.data %}{{ form.profile_img_url.data }}
+                    {% else %} {{ url_for('static', filename='img/no_profile_pic.png') }} {% endif %}" />
+                </div>
+                <label for="profile_img_url">{{ form.profile_img_url.description }} </label>
+                {{ form.profile_img_url(class="form-control") }}
+                {% if form.profile_img_url.errors %}
+                    {% for error in form.profile_img_url.errors %}
+                        <span class="error-message text-danger">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="text-center row">
+                <a class="btn btn-secondary" href="{{ url_for('post.feed_page') }}">Cancel</a>
+                <input class="btn btn-primary" type="submit" value="Update Change">
+            </div>
+        </form>
+        </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="{{ url_for('static', filename='js/upload_image.js') }}"></script>
+
 {% endblock %}

@@ -5,9 +5,15 @@ from flask import session
 from application.model.base import Session
 from application.model.users import User, UserStatus
 from application.model.tokens import Token, TokenType, TokenStatus
-from application.message import UserMessage, TokenMessage
+from application.utility.message import UserMessage, TokenMessage
 from application.send_mail import send_mail
 from config import Config
+
+
+def get_current_user_obj():
+    db_session = Session()
+    return db_session.query(User.username, User.email, User.profile_img_url).filter(
+        User.user_id == session['user_id']).one()
 
 
 def signup_api(signup_form):

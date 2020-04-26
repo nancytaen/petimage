@@ -4,7 +4,7 @@ from flask_cors import CORS
 from config import Config
 from application.model.model import init_db
 from application.views import user, post
-from application.navigation import top_level_nav
+from application.utility.navigation import top_level_nav
 
 
 def create_app():

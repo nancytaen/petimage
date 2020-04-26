@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, session
+from flask import Blueprint, render_template
 
-from application.navigation import logged_in_nav, logged_in_user
+from application.utility.navigation import logged_in_nav, logged_in_user
 
 post = Blueprint('post', __name__, template_folder="templates", static_folder="static")
 

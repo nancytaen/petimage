@@ -60,11 +60,14 @@ def verify_email_token(email, token):
 
 
 # account detail page
-@user.route('/user/account')
+@user.route('/user/account', methods=['GET', 'POST'])
 @login_required
 def account_page():
     user_obj = get_current_user_obj()
-    print(user_obj)
-    account_form = UserAccountForm(obj=user_obj)
+    account_form = UserAccountForm(request.form, obj=user_obj)
+    if request.method == 'POST':
+        if account_form.validate():
+            account_form.populate_obj(user_obj)
+
     return render_template('user/account.html', title="Account", description="Account Detail",
                            nav=logged_in_nav(), user=logged_in_user(), form=account_form)

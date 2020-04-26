@@ -2,8 +2,9 @@ $('#account_form').submit(function(){
   event.preventDefault();
   console.log(123);
   alert(123);
+
   $.ajax({
-    url: '/users/login',
+    url: '/user/account',
     data: $(this).serialize(),
     type: "POST",
     success: function() {

@@ -32,13 +32,9 @@
                 <img id="preview" height="50" width="50" src="{% if form.profile_img_url.data %}{{ form.profile_img_url.data }}
                     {% else %} {{ url_for('static', filename='img/no_profile_pic.png') }} {% endif %}" />
                 </div>
-                <label for="profile_img_url">{{ form.profile_img_url.description }} </label>
-                {{ form.profile_img_url(class="form-control") }}
-                {% if form.profile_img_url.errors %}
-                    {% for error in form.profile_img_url.errors %}
-                        <span class="error-message text-danger">{{ error }}</span>
-                    {% endfor %}
-                {% endif %}
+                <label for="profile_img">{{ form.profile_img_url.description }} </label>
+                {{ form.profile_img(class="form-control") }}
+                {{ form.profile_img_url }}
             </div>
             <div class="text-center row">
                 <a class="btn btn-secondary" href="{{ url_for('post.feed_page') }}">Cancel</a>

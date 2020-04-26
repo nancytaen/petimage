@@ -22,4 +22,5 @@ class UserLoginForm(Form):
 class UserAccountForm(Form):
     email = StringField('email', description="Email", validators=[validators.DataRequired])
     username = StringField('username', description="Username", validators=[validators.DataRequired()])
-    profile_img_url = FileField('profile_img_url', description='Profile Image')
+    profile_img = FileField('profile_img', description='Profile Image')
+    profile_img_url = StringField('profile_img_url')

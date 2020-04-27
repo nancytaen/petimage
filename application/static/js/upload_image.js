@@ -42,15 +42,7 @@ function uploadFile(file, s3Data, url){
       console.log("fail");
     }
   }).done(function(){
-      $.ajax({
-        url: '/user/account',
-        data: $("#account_form").serialize(),
-        type: "POST",
-        success: function() {
-        },
-        error: function() {
-        }
-      });
+      submitAccountForm();
   });
 }
 
@@ -62,18 +54,26 @@ $('#account_form').submit(function(){
   let uploadImg = $('#profile_img').prop('files')[0];
   if(uploadImg){
     getSignedRequest(uploadImg, "profile_pic");
+  } else {
+    submitAccountForm();
   }
-  $.ajax({
-    url: '/user/account',
-    data: $(this).serialize(),
-    type: "POST",
-    success: function() {
-    },
-    error: function() {
-    }
-  });
   return false;
 });
+
+
+function submitAccountForm(){
+   $.ajax({
+    url: '/user/account',
+    data: $('#account_form').serialize(),
+    type: "POST",
+    success: function() {
+      $('#account-error-message').text("Info successfully updated").addClass('alert-dark').addClass('alert');
+    },
+    error: function() {
+      $('#account-error-message').text("Update failed").addClass('alert-dark').addClass('alert');
+    }
+  });
+}
 
 
 // preview an image

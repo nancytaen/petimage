@@ -5,8 +5,9 @@
         <div class="card col-sm-6 mx-auto">
         <form id="account_form" method="POST" action="/user/account" novalidate>
             {% for message in get_flashed_messages() %}
-                <div class="alert alert-dark" role="alert" id="account-error-message">{{ message }}</div>
+                <div class="alert alert-dark" role="alert">{{ message }}</div>
             {% endfor %}
+            <div id="account-error-message" role="alert"></div>
             <div class="form-group">
                 <label for="email">{{ form.email.description }} </label>
                 {{ form.email(class="form-control") }}

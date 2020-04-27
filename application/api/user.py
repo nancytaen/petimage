@@ -11,8 +11,7 @@ from config import Config
 
 
 def get_current_user_obj(db_session):
-    return db_session.query(User).filter(
-        User.user_id == session['user_id']).one()
+    return db_session.query(User).filter(User.user_id == session['user_id']).one()
 
 
 def signup_api(signup_form):

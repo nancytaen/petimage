@@ -5,7 +5,7 @@
         <div class="card col-sm-6 mx-auto">
         <form id="account_form" method="POST" action="/user/account" novalidate>
             {% for message in get_flashed_messages() %}
-                <div class="alert alert-dark" role="alert">{{ message }}</div>
+                <div class="alert alert-dark" role="alert" id="account-error-message">{{ message }}</div>
             {% endfor %}
             <div class="form-group">
                 <label for="email">{{ form.email.description }} </label>
@@ -29,12 +29,12 @@
             </div>
             <div class="form-group">
                 <div>
-                <img id="preview" height="50" width="50" src="{% if form.profile_img_url.data %}{{ form.profile_img_url.data }}
+                <img id="preview" height="100" width="100" src="{% if form.profile_img_url.data %}{{ form.profile_img_url.data }}
                     {% else %} {{ url_for('static', filename='img/no_profile_pic.png') }} {% endif %}" />
                 </div>
                 <label for="profile_img">{{ form.profile_img_url.description }} </label>
                 <input type="file" id="profile_img" name="profile_img" class="form-control">
-                {{ form.profile_img_url }}
+                {{ form.profile_img_url(type="hidden") }}
             </div>
             <div class="text-center row">
                 <a class="btn btn-secondary" href="{{ url_for('post.feed_page') }}">Cancel</a>

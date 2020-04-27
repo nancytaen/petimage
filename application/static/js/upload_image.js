@@ -49,18 +49,16 @@ function uploadFile(file, s3Data, url){
 }
 
 
-$('#account_form').submit(function(){
-  event.preventDefault();
-  let uploadImg = $('#profile_img').prop('files');
-  console.log(uploadImg);
-  $.ajax({
-    url: '/user/account',
-    data: $(this).serialize(),
-    type: "POST",
-    success: function() {
-    },
-    error: function() {
-    }
-  });
-  return false;
-});
+// $('#account_form').submit(function(){
+//   event.preventDefault();
+//   $.ajax({
+//     url: '/user/account',
+//     data: $(this).serialize(),
+//     type: "POST",
+//     success: function() {
+//     },
+//     error: function() {
+//     }
+//   });
+//   return false;
+// });

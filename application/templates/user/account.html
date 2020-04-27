@@ -3,7 +3,7 @@
 {% block content %}
 
         <div class="card col-sm-6 mx-auto">
-        <form id="account_form" method="POST" novalidate>
+        <form id="account_form" method="POST" action="/user/account" novalidate>
             {% for message in get_flashed_messages() %}
                 <div class="alert alert-dark" role="alert">{{ message }}</div>
             {% endfor %}
@@ -33,7 +33,7 @@
                     {% else %} {{ url_for('static', filename='img/no_profile_pic.png') }} {% endif %}" />
                 </div>
                 <label for="profile_img">{{ form.profile_img_url.description }} </label>
-                {{ form.profile_img(class="form-control") }}
+                <input type="file" id="profile_img" name="profile_img" class="form-control">
                 {{ form.profile_img_url }}
             </div>
             <div class="text-center row">

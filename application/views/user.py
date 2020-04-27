@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, session
 
+from application.model.base import Session
 from application.form import UserRegistrationForm, UserLoginForm, UserAccountForm
 from application.utility.navigation import top_level_nav, logged_in_user, logged_in_nav
 from application.api.user import signup_api, login_api, verify_token_url, get_current_user_obj
@@ -63,11 +64,13 @@ def verify_email_token(email, token):
 @user.route('/user/account', methods=['GET', 'POST'])
 @login_required
 def account_page():
-    user_obj = get_current_user_obj()
+    db_session = Session()
+    user_obj = get_current_user_obj(db_session)
     account_form = UserAccountForm(request.form, obj=user_obj)
     if request.method == 'POST':
-        # if account_form.validate():
-        account_form.populate_obj(user_obj)
-
+        if account_form.validate():
+            account_form.populate_obj(user_obj)
+            db_session.commit()
+    db_session.close()
     return render_template('user/account.html', title="Account", description="Account Detail",
                            nav=logged_in_nav(), user=logged_in_user(), form=account_form)

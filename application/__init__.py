@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, session, redirect, url_for
 from flask_cors import CORS
 
 from config import Config
@@ -23,6 +23,8 @@ def create_app():
     @app.route('/')
     @app.route('/top')
     def top_page():
+        if session['logged_in']:
+            return redirect(url_for('post.feed_page'))
         return render_template("top.html",
                                title="top", description="this is top",
                                nav=top_level_nav())

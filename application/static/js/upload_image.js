@@ -4,15 +4,16 @@ $('#profile_img').change(function(){
   let uploadImg = $('#profile_img').prop('files')[0];
   console.log(uploadImg);
   if(uploadImg){
-    getSignedRequest(uploadImg);
+    getSignedRequest(uploadImg, "profile_pic");
   }
 });
 
+
 // obtain s3 signed request from server side
-function getSignedRequest(file){
+function getSignedRequest(file, postType){
   alert("YAY");
   $.ajax({
-    url: '/sign_s3?file_name=' + file.name + "&file_type=" + file.type,
+    url: '/sign_s3/' + postType + '?file_name=' + file.name + "&file_type=" + file.type,
     type: 'GET',
     success: function(result) {
       let response = JSON.parse(result);
@@ -21,11 +22,8 @@ function getSignedRequest(file){
   })
 }
 
+// upload file to s3
 function uploadFile(file, s3Data, url){
-
-  console.log(s3Data);
-  var xhr = new XMLHttpRequest()
-  xhr.open("POST", s3Data.url);
 
   let postData = new FormData();
   for (const key in s3Data.fields){
@@ -33,33 +31,23 @@ function uploadFile(file, s3Data, url){
   }
   postData.append('file', file);
 
-  xhr.onreadystatechange = function() {
-    if(xhr.readyState === 4){
-      if(xhr.status === 200 || xhr.status === 204){
-
-       $('#preview').src = url;
-       $('#profile_img_url').value = url;
-      } else {
-        alert("Could not uplaod file");
-      }
+  $.ajax({
+    url: s3Data.url,
+    type: 'POST',
+    data: postData,
+    processData: false,
+    contentType: false,
+    success: function(){
+       $('#preview').attr("src", url);
+       $('#profile_img_url').val(url);
+       console.log("success");
+    },
+    failure: function(){
+      console.log("fail");
     }
-  };
-  xhr.send(postData);
-
-  // $.ajax({
-  //   url: s3Data.url,
-  //   type: 'POST',
-  //   data: postData,
-  //   success: function(){
-  //      $('#preview').src = url;
-  //      $('#profile_img_url').value = url;
-  //      console.log("success");
-  //   },
-  //   failure: function(){
-  //     console.log("fail");
-  //   }
-  // })
+  })
 }
+
 
 $('#account_form').submit(function(){
   event.preventDefault();

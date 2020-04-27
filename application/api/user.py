@@ -60,6 +60,7 @@ def login_api(login_form):
     session['logged_in'] = True
     session['user_id'] = matched_user.user_id
     session['username'] = matched_user.username
+    session['profile_img'] = matched_user.profile_img_url
     return UserMessage.LOGIN_SUCCESS
 
 

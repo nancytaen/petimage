@@ -9,11 +9,20 @@
             {% endfor %}
             <div id="account-error-message" role="alert"></div>
             <div class="form-group">
+                <div>
+                    <img id="preview" height="100" width="100" alt="profile image"
+                         src="{% if form.profile_img_url.data %}{{ form.profile_img_url.data }}
+                     {% else %} {{ url_for('static', filename='img/no_profile_pic.png') }} {% endif %}" />
+                </div>
+                <input type="file" id="profile_img" name="profile_img" class="form-control">
+                {{ form.profile_img_url(type="hidden") }}
+            </div>
+            <div class="form-group">
                 <label for="email">{{ form.email.description }} </label>
                 {{ form.email(class="form-control") }}
                 {% if form.email.errors %}
                     {% for error in form.email.errors %}
-{#                        TODO error-message class in css#}
+                        {#                        TODO error-message class in css#}
                         <span class="error-message text-danger">{{ error }}</span>
                     {% endfor %}
                 {% endif %}
@@ -23,19 +32,9 @@
                 {{ form.username(class="form-control") }}
                 {% if form.username.errors %}
                     {% for error in form.username.errors %}
-{#                        TODO error-message class in css#}
                         <span class="error-message text-danger">{{ error }}</span>
                     {% endfor %}
                 {% endif %}
-            </div>
-            <div class="form-group">
-                <div>
-                <img id="preview" height="100" width="100" src="{% if form.profile_img_url.data %}{{ form.profile_img_url.data }}
-                    {% else %} {{ url_for('static', filename='img/no_profile_pic.png') }} {% endif %}" />
-                </div>
-                <label for="profile_img">{{ form.profile_img_url.description }} </label>
-                <input type="file" id="profile_img" name="profile_img" class="form-control">
-                {{ form.profile_img_url(type="hidden") }}
             </div>
             <div class="text-center row">
                 <a class="btn btn-secondary" href="{{ url_for('post.feed_page') }}">Cancel</a>

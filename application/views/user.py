@@ -47,6 +47,7 @@ def logout():
     session['logged_in'] = False
     session['user_id'] = None
     session['username'] = None
+    session['profile_img'] = None
     return redirect(url_for('top_page'))
 
 
@@ -71,6 +72,8 @@ def account_page():
         if account_form.validate():
             account_form.populate_obj(user_obj)
             db_session.commit()
+            session['username'] = account_form.username.data
+            session['profile_img'] = account_form.profile_img_url.data
     db_session.close()
     return render_template('user/account.html', title="Account", description="Account Detail",
                            nav=logged_in_nav(), user=logged_in_user(), form=account_form)

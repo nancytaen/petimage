@@ -22,7 +22,7 @@ def feed_page():
 def sign_s3(post_type):
 
     file_name = request.args.get('file_name') + hashlib.sha256(
-        (post_type + session['username'] + str(datetime.now())).encode()).hexdigest()
+        (post_type + session['username'] + str(datetime.now())).encode()).hexdigest() + ".png"
     file_type = request.args.get('file_type')
 
     s3 = boto3.client('s3', aws_access_key_id=config.Config.AWS_ACCESS_KEY,

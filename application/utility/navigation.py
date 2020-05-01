@@ -19,12 +19,12 @@ def logged_in_nav(feed=False):
     navigation bar content for logged in pages
     :return:
     """
-    return [{'name': 'My Feed', 'url': '/post/feed', 'status': feed},
-            {'name': 'Logout', 'url': '/logout', 'status': False}]
+    return [{'name': 'My Feed', 'url': '/post/feed', 'status': feed}]
 
 
 def logged_in_user():
     return {'username': session['username'],
-            'url': '/user/account',
-            'profile_img': session['profile_img']
+            'edit_url': '/user/account',
+            'profile_img': session['profile_img'],
+            'logout_url': '/logout'
             }

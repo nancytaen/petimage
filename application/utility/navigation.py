@@ -14,12 +14,13 @@ def top_level_nav(login=False, signup=False):
             ]
 
 
-def logged_in_nav(feed=False):
+def logged_in_nav(feed=False, create=False):
     """
     navigation bar content for logged in pages
     :return:
     """
-    return [{'name': 'My Feed', 'url': '/post/feed', 'status': feed}]
+    return [{'name': 'My Feed', 'url': '/post/feed', 'status': feed},
+            {'name': 'Create Post', 'url': '/post/create', 'status': create}]
 
 
 def logged_in_user():

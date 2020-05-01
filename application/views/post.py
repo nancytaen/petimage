@@ -18,6 +18,12 @@ def feed_page():
                            nav=logged_in_nav(feed=True), user=logged_in_user())
 
 
+@post.route('/post/create')
+def create_post():
+    return render_template("post/create_post.html", title="Create Post", description="Create post",
+                           nav=logged_in_nav(create=True), user=logged_in_user())
+
+
 @post.route('/sign_s3/<post_type>')
 def sign_s3(post_type):
 

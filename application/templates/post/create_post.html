@@ -1,4 +1,33 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <div></div>
+    <div class="card col-sm-6 mx-auto">
+    <form id="create-post-form" method="POST" action="/post/create">
+        <div id="create-form-error-message" role="alert"></div>
+            <div class="form-group">
+                <div>
+                    <img id="preview" height="100" width="100" alt="profile image"
+                         src="#" />
+                </div>
+                {% if form.post_img_url.errors %}
+                    {% for error in form.post_img_url.errors %}
+\                        <span class="error-message text-danger">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+                <input type="file" id="post_img" name="post_img" class="form-control">
+                {{ form.post_img_url(type="hidden") }}
+            </div>
+            <div class="form-group">
+                <label for="post_title">{{ form.post_title.label }} </label>
+                {{ form.post_title(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="post_body">{{ form.post_body.label }} </label>
+                {{ form.post_body(class="form-control") }}
+            </div>
+            <div class="text-center row">
+                <a class="btn btn-secondary" href="{{ url_for('post.feed_page') }}">Cancel</a>
+                <input class="btn btn-primary" type="submit" value="Create Post">
+            </div>
+    </form>
+    </div>
 {% endblock %}

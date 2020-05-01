@@ -15,7 +15,7 @@ class Post(Base):
     updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
     user_id = Column(Integer, ForeignKey('user.user_id'), nullable=False)
     post_title = Column(String(20))
-    post_text = Column(String(128))
+    post_body = Column(String(128))
     post_img_url = Column(String(128), nullable=False)
     is_deleted = Column(Boolean, nullable=False, default=False)
 

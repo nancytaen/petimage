@@ -23,3 +23,9 @@ class UserAccountForm(Form):
     email = StringField('email', description="Email", validators=[validators.DataRequired()])
     username = StringField('username', description="Username", validators=[validators.DataRequired()])
     profile_img_url = StringField('profile_img_url')
+
+
+class PostCreateForm(Form):
+    post_title = StringField('Title')
+    post_img_url = StringField('post_img_url', validators=[validators.DataRequired()])
+    post_body = StringField('Body')

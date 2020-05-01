@@ -8,14 +8,18 @@
                 <div class="alert alert-dark" role="alert">{{ message }}</div>
             {% endfor %}
             <div id="account-error-message" role="alert"></div>
-            <div class="form-group">
-                <div>
-                    <img id="preview" height="100" width="100" alt="profile image"
-                         src="{% if form.profile_img_url.data %}{{ form.profile_img_url.data }}
-                     {% else %} {{ url_for('static', filename='img/no_profile_pic.png') }} {% endif %}" />
+            <div>
+                <img id="preview" height="100" width="100" alt="profile image"
+                 src="{% if form.profile_img_url.data %}{{ form.profile_img_url.data }}
+                {% else %} {{ url_for('static', filename='img/no_profile_pic.png') }} {% endif %}" />
+            </div>
+            <div class="form-group input-group">
+                <div class="custom-file">
+                    <input type="file" id="profile_img" name="profile_img" class="form-control custom-file-input"
+                            aria-describedby="profileImgFileAddOn">
+                    <label class="custom-file-label" for="profileImgFileAddOn">Choose file</label>
+                    {{ form.profile_img_url(type="hidden") }}
                 </div>
-                <input type="file" id="profile_img" name="profile_img" class="form-control">
-                {{ form.profile_img_url(type="hidden") }}
             </div>
             <div class="form-group">
                 <label for="email">{{ form.email.description }} </label>

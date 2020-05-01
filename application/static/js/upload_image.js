@@ -5,21 +5,26 @@ $('#profile_img').change(function(){
   readURL(uploadImg);
 });
 
+$('#post_img').change(function(){
+  let uploadImg = $('#post_img').prop('files')[0];
+  readURL(uploadImg);
+});
+
 
 // obtain s3 signed request from server side
-function getSignedRequest(file, postType){
+function getSignedRequest(file, postType, isPost){
   $.ajax({
     url: '/sign_s3/' + postType + '?file_name=' + file.name + "&file_type=" + file.type,
     type: 'GET',
     success: function(result) {
       let response = JSON.parse(result);
-      uploadFile(file, response.data, response.url);
+      uploadFile(file, response.data, response.url, isPost);
     }
   })
 }
 
 // upload file to s3
-function uploadFile(file, s3Data, url){
+function uploadFile(file, s3Data, url, isPost){
 
   let postData = new FormData();
   for (const key in s3Data.fields){
@@ -34,15 +39,23 @@ function uploadFile(file, s3Data, url){
     processData: false,
     contentType: false,
     success: function(){
-       $('#preview').attr("src", url);
-       $('#profile_img_url').val(url);
+      $('#preview').attr("src", url);
+      if(isPost === false){
+        $('#profile_img_url').val(url);
+      } else {
+        $('#post_img_url').val(url);
+      }
        console.log("success");
     },
     failure: function(){
       console.log("fail");
     }
   }).done(function(){
-      submitAccountForm();
+      if (isPost === false){
+        submitAccountForm();
+      } else {
+        submitCreatePostForm();
+      }
   });
 }
 
@@ -71,6 +84,35 @@ function submitAccountForm(){
     },
     error: function() {
       $('#account-error-message').text("Update failed").addClass('alert-dark').addClass('alert');
+    }
+  });
+}
+
+
+$('#create-post-form').submit(function(){
+  event.preventDefault();
+
+  // upload image to s3 if applicable
+  let uploadImg = $('#post_img').prop('files')[0];
+  if(uploadImg){
+    getSignedRequest(uploadImg, "profile_pic");
+  } else {
+    $('#create-form-error-message').text("Please upload a picture").addClass('alert-dark').addClass('alert');
+  }
+  return false;
+});
+
+
+function submitCreatePostForm(){
+   $.ajax({
+    url: '/post/create',
+    data: $('#create-post-form').serialize(),
+    type: "POST",
+    success: function() {
+      $('#create-form-error-message').text("Info successfully updated").addClass('alert-dark').addClass('alert');
+    },
+    error: function() {
+      $('#create-form-error-message').text("Post failed").addClass('alert-dark').addClass('alert');
     }
   });
 }

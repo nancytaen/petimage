@@ -22,6 +22,8 @@ def feed_page():
 @post.route('/post/create', methods=['GET', 'POST'])
 def create_post():
     post_form = PostCreateForm(request.json)
+    if request.method == 'POST':
+        print("HEREEEEEEEEEE")
     return render_template("post/create_post.html", title="Create Post", description="Create post",
                            nav=logged_in_nav(create=True), user=logged_in_user(), form=post_form)
 

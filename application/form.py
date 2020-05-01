@@ -1,4 +1,4 @@
-from wtforms import Form, SubmitField, StringField, PasswordField, FileField, validators
+from wtforms import Form, SubmitField, StringField, PasswordField, TextAreaField, validators
 
 
 # form for user registration
@@ -28,4 +28,4 @@ class UserAccountForm(Form):
 class PostCreateForm(Form):
     post_title = StringField('Title')
     post_img_url = StringField('post_img_url', validators=[validators.DataRequired()])
-    post_body = StringField('Body')
+    post_body = TextAreaField('Body')

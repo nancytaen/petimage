@@ -32,6 +32,10 @@ class User(Base):
     user_status = Column(Enum(UserStatus), default=UserStatus.temporary)
 
     token = relationship("Token", backref="user")
+    post = relationship("Post", backref="user")
+    like = relationship("Like", backref="user")
+    comment = relationship("Comment", backref="user")
+    tag = relationship("Tag", backref="user")
 
     # for creating User instance
     def __init__(self, email, password):

@@ -1,5 +1,5 @@
 from flask import session
-from sqlalchemy import func
+from sqlalchemy import func, and_
 
 from application.model.base import Session
 from application.model.posts import Post, Like, Comment
@@ -26,7 +26,7 @@ def get_post_detail(post_id):
     db_session = Session()
     post_info = db_session.query(Post, User, func.count(Like.like_id)).filter(Post.post_id == post_id).join(
         User, User.user_id == Post.user_id).outerjoin(
-        Like, Like.post_id == post_id).one_or_none()
+        Like, and_(Like.post_id == post_id, Like.user_id == session['user_id'])).one_or_none()
 
     if post_info is None:
         return PostMessage.POST_NOT_FOUND
@@ -40,7 +40,7 @@ def get_post_detail(post_id):
 
     return {'id': post_id, 'title': post.post_title, 'body': post.post_body, 'img_url': post.post_img_url,
             'comments': [{'comment_body': comment.body, 'like': like} for comment, like in comments] if
-            comments[0][0] else [], 'like': like,
+            comments[0][0] else [], 'like': True if like else False,
             'user': {'user_id': user.user_id, 'username': user.username}
             }
 

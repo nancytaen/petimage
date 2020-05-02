@@ -9,7 +9,8 @@
             <p> {{ post.body }} </p>
         </div>
         <div>
-            {{ post.like }} Likes
+            <a class="btn btn-secondary col-sm-1 {% if post.like == True %} disabled {% endif %}"
+               href="/post/like/{{ post.post_id }}"> Like </a>
         </div>
         <div>
             {{ post.comments|length }} comments

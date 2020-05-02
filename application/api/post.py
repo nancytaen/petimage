@@ -12,7 +12,7 @@ def get_my_posts():
     db_session = Session()
     posts = db_session.query(Post).filter(Post.user_id == session['user_id']).all()
 
-    my_posts = [{'title': post.post_title, 'body': post.post_body,
+    my_posts = [{'id': post.post_id, 'title': post.post_title, 'body': post.post_body,
                  'img_url': post.post_img_url} for post in posts]
     return my_posts
 

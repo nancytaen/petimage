@@ -2,13 +2,14 @@ import json
 import hashlib
 from datetime import datetime
 
-from flask import Blueprint, render_template, request, session
+from flask import Blueprint, render_template, request, session, make_response
 import boto3
 from botocore.client import Config
 
 import config
 from application.utility.navigation import logged_in_nav, logged_in_user
 from application.form import PostCreateForm
+from application.api.post import create_post_api
 
 post = Blueprint('post', __name__, template_folder="templates", static_folder="static")
 
@@ -21,9 +22,10 @@ def feed_page():
 
 @post.route('/post/create', methods=['GET', 'POST'])
 def create_post():
-    post_form = PostCreateForm(request.json)
+    post_form = PostCreateForm(request.form)
     if request.method == 'POST':
-        print("HEREEEEEEEEEE")
+        if post_form.validate():
+            create_post_api(post_form)
     return render_template("post/create_post.html", title="Create Post", description="Create post",
                            nav=logged_in_nav(create=True), user=logged_in_user(), form=post_form)
 

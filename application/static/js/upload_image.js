@@ -66,7 +66,7 @@ $('#account_form').submit(function(){
   // upload image to s3 if applicable
   let uploadImg = $('#profile_img').prop('files')[0];
   if(uploadImg){
-    getSignedRequest(uploadImg, "profile_pic");
+    getSignedRequest(uploadImg, "profile_pic", false);
   } else {
     submitAccountForm();
   }
@@ -95,7 +95,7 @@ $('#create-post-form').submit(function(){
   // upload image to s3 if applicable
   let uploadImg = $('#post_img').prop('files')[0];
   if(uploadImg){
-    getSignedRequest(uploadImg, "profile_pic");
+    getSignedRequest(uploadImg, "profile_pic", true);
   } else {
     $('#create-form-error-message').text("Please upload a picture").addClass('alert-dark').addClass('alert');
   }

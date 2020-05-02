@@ -23,6 +23,9 @@ class Post(Base):
     like = relationship('Like', backref='post')
     comment = relationship('Comment', backref='post')
 
+    def __init__(self, user_id):
+        self.user_id = user_id
+
 
 class PostTag(Base):
     """

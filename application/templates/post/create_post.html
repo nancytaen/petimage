@@ -12,8 +12,8 @@
                 <input type="file" id="post_img" name="post_img" class="form-control custom-file-input"
                        aria-describedby="postImgFileAddOn">
                 <label class="custom-file-label" for="postImgFileAddOn">Choose file</label>
-                {{ form.post_img_url(type="hidden") }}
             </div>
+            {{ form.post_img_url(type="hidden") }}
             {% if form.post_img_url.errors %}
                 {% for error in form.post_img_url.errors %}
                     <span class="error-message text-danger">{{ error }}</span>

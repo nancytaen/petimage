@@ -12,3 +12,7 @@ class TokenMessage:
     TOKEN_NOT_FOUND = "The url is invalid or has already been used."
     TOKEN_EXPIRED = "The link has expired. "
     TOKEN_INCORRECT = "The token is incorrect."
+
+
+class PostMessage:
+    POST_NOT_FOUND = "The post was not found"

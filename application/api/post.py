@@ -1,7 +1,10 @@
 from flask import session
+from sqlalchemy import func
 
 from application.model.base import Session
-from application.model.posts import Post
+from application.model.posts import Post, Like, Comment
+from application.model.users import User
+from application.utility.message import PostMessage
 
 
 def get_my_posts():
@@ -15,6 +18,23 @@ def get_my_posts():
     my_posts = [{'id': post.post_id, 'title': post.post_title, 'body': post.post_body,
                  'img_url': post.post_img_url} for post in posts]
     return my_posts
+
+
+def get_post_detail(post_id):
+    db_session = Session()
+    post_info = db_session.query(Post, User).filter(Post.post_id == post_id).join(User, User.user_id == Post.user_id).outerjoin(
+        Comment, Comment.post_id == post_id).one_or_none()
+
+    if post_info is None:
+        return PostMessage.POST_NOT_FOUND
+
+    post = post_info[0]
+    user = post_info[1]
+
+    return {'id': post_id, 'title': post.post_title, 'body': post.post_body, 'img_url': post.post_img_url,
+            'comments': [{'comment_body': comment.body} for comment in post.comment], 'like_num': 0,
+            'user_id': user.user_id, 'username': user.username
+            }
 
 
 def create_post_api(post_form):

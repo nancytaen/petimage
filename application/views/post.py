@@ -9,7 +9,7 @@ from botocore.client import Config
 import config
 from application.utility.navigation import logged_in_nav, logged_in_user
 from application.form import PostCreateForm
-from application.api.post import create_post_api, get_my_posts
+from application.api.post import create_post_api, get_my_posts, get_post_detail
 
 post = Blueprint('post', __name__, template_folder="templates", static_folder="static")
 
@@ -29,6 +29,13 @@ def create_post():
             create_post_api(post_form)
     return render_template("post/create_post.html", title="Create Post", description="Create post",
                            nav=logged_in_nav(create=True), user=logged_in_user(), form=post_form)
+
+
+@post.route('/post/<post_id>', methods=['GET', 'POST'])
+def post_page(post_id):
+    post_info = get_post_detail(post_id)
+    return render_template("post/post_detail.html", title="Post", description="Post detail page",
+                           nav=logged_in_nav(), user=logged_in_user(), post=post_info)
 
 
 @post.route('/sign_s3/<post_type>')

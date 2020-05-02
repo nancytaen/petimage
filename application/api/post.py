@@ -13,27 +13,35 @@ def get_my_posts():
     :return: list of dicts of posts
     """
     db_session = Session()
-    posts = db_session.query(Post).filter(Post.user_id == session['user_id']).all()
+    posts = db_session.query(Post, func.count(Like.like_id)).filter(
+        Post.user_id == session['user_id']).outerjoin(Like).group_by(Post.post_id).all()
 
     my_posts = [{'id': post.post_id, 'title': post.post_title, 'body': post.post_body,
-                 'img_url': post.post_img_url} for post in posts]
+                 'img_url': post.post_img_url, 'like': like,
+                 'username': session['username']} for post, like in posts]
     return my_posts
 
 
 def get_post_detail(post_id):
     db_session = Session()
-    post_info = db_session.query(Post, User).filter(Post.post_id == post_id).join(User, User.user_id == Post.user_id).outerjoin(
-        Comment, Comment.post_id == post_id).one_or_none()
+    post_info = db_session.query(Post, User, func.count(Like.like_id)).filter(Post.post_id == post_id).join(
+        User, User.user_id == Post.user_id).outerjoin(
+        Like, Like.post_id == post_id).one_or_none()
 
     if post_info is None:
         return PostMessage.POST_NOT_FOUND
 
+    comments = db_session.query(Comment, func.count(Like.like_id)).filter(Comment.post_id == post_id).join(
+        User, User.user_id == Comment.user_id).outerjoin(Like, Like.comment_id == Comment.comment_id).all()
+
     post = post_info[0]
     user = post_info[1]
+    like = post_info[2]
 
     return {'id': post_id, 'title': post.post_title, 'body': post.post_body, 'img_url': post.post_img_url,
-            'comments': [{'comment_body': comment.body} for comment in post.comment], 'like_num': 0,
-            'user_id': user.user_id, 'username': user.username
+            'comments': [{'comment_body': comment.body, 'like': like} for comment, like in comments] if
+            comments[0][0] else [], 'like': like,
+            'user': {'user_id': user.user_id, 'username': user.username}
             }
 
 

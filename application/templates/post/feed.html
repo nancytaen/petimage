@@ -3,13 +3,15 @@
 {% block content %}
     <div>
     {% for post in posts %}
-        <div class="card">
+        <div class="card col-sm-8 mx-auto">
         <div class="text-center">
+            <p> {{ post.username }}</p>
             <img src="{{ post.img_url }}" alt="Post Image" />
             <h2> {{ post.title }} </h2>
             <p> {{ post.body }} </p>
+            <p> {{ post.like }} likes </p>
+            <a class="btn btn-secondary col-sm-4" href="/post/{{ post.id }}">Detail</a>
         </div>
-        <a class="btn btn-secondary" href="/post/{{ post.id }}">Detail</a>
         </div>
     {% endfor %}
     </div>

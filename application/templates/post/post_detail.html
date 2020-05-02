@@ -1,17 +1,18 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <div>
-        <div class="text-center">
-            <p> {{ post.username }}</p>
+    <div class="text-center">
+        <div>
+            <p> {{ post.user.username }}</p>
             <img src="{{ post.img_url }}" alt="Post Image" />
             <h2> {{ post.title }} </h2>
             <p> {{ post.body }} </p>
         </div>
         <div>
-            {{ post.like_num }} Likes
+            {{ post.like }} Likes
         </div>
         <div>
+            {{ post.comments|length }} comments
             {% for comment in post.comments %}
                 <p>comment.comment_body</p>
             {% endfor %}

@@ -2,22 +2,23 @@ import json
 import hashlib
 from datetime import datetime
 
-from flask import Blueprint, render_template, request, session, make_response
+from flask import Blueprint, render_template, request, session
 import boto3
 from botocore.client import Config
 
 import config
 from application.utility.navigation import logged_in_nav, logged_in_user
 from application.form import PostCreateForm
-from application.api.post import create_post_api
+from application.api.post import create_post_api, get_my_posts
 
 post = Blueprint('post', __name__, template_folder="templates", static_folder="static")
 
 
 @post.route('/post/feed')
 def feed_page():
+    my_posts = get_my_posts()
     return render_template("post/feed.html", title="My Feed", description="Display posts",
-                           nav=logged_in_nav(feed=True), user=logged_in_user())
+                           nav=logged_in_nav(feed=True), user=logged_in_user(), posts=my_posts)
 
 
 @post.route('/post/create', methods=['GET', 'POST'])

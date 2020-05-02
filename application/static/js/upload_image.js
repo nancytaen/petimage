@@ -109,7 +109,7 @@ function submitCreatePostForm(){
     data: $('#create-post-form').serialize(),
     type: "POST",
     success: function() {
-      $('#create-form-error-message').text("Info successfully updated").addClass('alert-dark').addClass('alert');
+      window.location.href = '/post/feed'
     },
     error: function() {
       $('#create-form-error-message').text("Post failed").addClass('alert-dark').addClass('alert');

@@ -6,10 +6,12 @@
         <div class="card col-sm-8 mx-auto">
         <div class="text-center">
             <p> {{ post.username }}</p>
-            <img src="{{ post.img_url }}" alt="Post Image" />
+            <img src="{{ post.img_url }}" alt="Post Image" width="500" height="300" />
             <h2> {{ post.title }} </h2>
             <p> {{ post.body }} </p>
-            <p> {{ post.like }} likes </p>
+            <p> {% if post.likes %} {{ post.likes }} {% else %} 0 {% endif %} likes </p>
+            <p> {% if post.comments %} {{ post.comments }} {% else %} 0 {% endif %} comments </p>
+            <a class="btn btn-light col-sm-2 {% if post.liked == False %} disabled {% endif %}">Like</a>
             <a class="btn btn-secondary col-sm-4" href="/post/{{ post.id }}">Detail</a>
         </div>
         </div>

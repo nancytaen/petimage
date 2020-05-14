@@ -69,8 +69,6 @@ class Comment(Base):
     comment_body = Column(String(128), nullable=False)
     is_deleted = Column(Boolean, nullable=False, default=False)
 
-    like = relationship('Like', backref='comment')
-
 
 class Like(Base):
     """
@@ -83,6 +81,5 @@ class Like(Base):
     created_at = Column(DateTime, nullable=False, default=func.now())
     updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
     user_id = Column(Integer, ForeignKey('user.user_id'), nullable=False)
-    post_id = Column(Integer, ForeignKey('post.post_id'))
-    comment_id = Column(Integer, ForeignKey('comment.comment_id'))
+    post_id = Column(Integer, ForeignKey('post.post_id'), nullable=False)
     is_unliked = Column(Boolean, nullable=False, default=False)

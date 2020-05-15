@@ -44,14 +44,15 @@ def get_post_detail(post_id):
     db_session = Session()
     post_info = db_session.query(Post, User, func.count(distinct(Like.like_id))).filter(Post.post_id == post_id).join(
         User, User.user_id == Post.user_id).outerjoin(
-        Like, and_(Like.post_id == post_id, Like.user_id == session['user_id'])).one_or_none()
+        Like, and_(Like.post_id == post_id, Like.user_id == session['user_id'], Like.is_unliked == False)).one_or_none()
 
     if post_info is None:
         return PostMessage.POST_NOT_FOUND
 
     comments = db_session.query(Comment, User.username).filter(Comment.post_id == post_id).join(
         User, User.user_id == Comment.user_id).all()
-    likes = db_session.query(User.username).join(Like, Like.user_id == User.user_id).filter(Like.post_id == post_id).all()
+    likes = db_session.query(User.username).join(Like, Like.user_id == User.user_id).filter(and_(
+        Like.post_id == post_id, Like.is_unliked == False)).all()
 
     post = post_info[0]
     user = post_info[1]

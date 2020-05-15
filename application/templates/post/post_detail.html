@@ -4,17 +4,17 @@
     <div class="text-center">
         <div>
             <p> {{ post.user.username }}</p>
-            <img src="{{ post.img_url }}" alt="Post Image" width="500" height="300"/>
             <h2> {{ post.title }} </h2>
+            <img src="{{ post.img_url }}" alt="Post Image" width="500" height="300"/>
             <p> {{ post.body }} </p>
         </div>
         <div>
-            <a class="btn col-sm-1 {% if post.liked == True %} disabled btn-danger {% else %} btn-outline-danger {% endif %}"
-               href="/post/like/{{ post.post_id }}"> Like </a>
-            <a> {{ post.likes|length }} likes </a>
-            {{ post.comments|length }} comments
+            <button class="btn col-sm-1 {% if post.liked == True %} btn-danger {% else %} btn-outline-danger {% endif %}"
+                    id="LikeButton{{ post.id }}" onclick="LikePost({{ post.id }})">Like</button>
+            <span id="NumLikes{{ post.id }}"> {{ post.likes|length }} </span> likes
+            <span> {{ post.comments|length }} </span> comments
         </div>
-        <div>
+        <div class="my-4">
             {% for comment in post.comments %}
                 <div class="row">
                     {{ comment.username }}
@@ -22,7 +22,7 @@
                 </div>
             {% endfor %}
         </div>
-        <div>
+        <div class="my-4">
             <form method="POST" action="post/comment/{{ post.post_id }}">
                 <div class="input-group col-sm-6 mx-auto">
                     <input type="text" id="comment_text" class="form-control" placeholder="Type Comment"
@@ -33,6 +33,10 @@
                 </div>
             </form>
         </div>
-        <a class="btn btn-secondary mx-0" href="/post/feed"> Back </a>
+        <a class="btn btn-secondary align-left" href="/post/feed"> Back </a>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="{{ url_for('static', filename='js/post_action.js') }}"></script>
+
 {% endblock %}

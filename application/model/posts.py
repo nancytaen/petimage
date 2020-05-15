@@ -69,6 +69,11 @@ class Comment(Base):
     comment_body = Column(String(128), nullable=False)
     is_deleted = Column(Boolean, nullable=False, default=False)
 
+    def __init__(self, post_id, user_id, comment):
+        self.post_id = post_id
+        self.user_id = user_id
+        self.comment_body = comment
+
 
 class Like(Base):
     """

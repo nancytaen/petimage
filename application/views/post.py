@@ -9,7 +9,7 @@ from botocore.client import Config
 import config
 from application.utility.navigation import logged_in_nav, logged_in_user
 from application.form import PostCreateForm
-from application.api.post import create_post_api, get_my_posts, get_post_detail, like_post_api
+from application.api.post import create_post_api, get_my_posts, get_post_detail, like_post_api, comment_post_api
 
 post = Blueprint('post', __name__, template_folder="templates", static_folder="static")
 
@@ -59,7 +59,8 @@ def comment_post(post_id):
     :return: status 0 for success, 1 for error
     """
     comment = request.form['comment_text']
-
+    if not comment_post_api(post_id, comment):
+        return jsonify({'status': 1})
     return jsonify({'status': 0})
 
 

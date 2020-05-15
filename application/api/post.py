@@ -60,7 +60,7 @@ def get_post_detail(post_id):
 
     return {'id': post.post_id, 'title': post.post_title, 'body': post.post_body, 'img_url': post.post_img_url,
             'liked': True if like else False, 'likes': likes,
-            'comments': [{'comment_body': comment.body, 'username': username} for comment, username in comments],
+            'comments': [{'comment_body': comment.comment_body, 'username': username} for comment, username in comments],
             'user': {'user_id': user.user_id, 'username': user.username}
             }
 
@@ -81,7 +81,7 @@ def create_post_api(post_form):
 
 def like_post_api(post_id):
     """
-    like post
+    like post (add on db)
     :param post_id:
     :return: False if error occurs
     """
@@ -94,7 +94,27 @@ def like_post_api(post_id):
         else:
             db_session.add(Like(post_id, session['user_id']))
         db_session.commit()
-        db_session.close()
+    except Exception as e:
+        print(e)
+        return False
+    return True
+
+
+def comment_post_api(post_id, comment):
+    """
+    comment on a post (add on db)
+    :param post_id:
+    :param comment:
+    :return: False if error occurs
+    """
+
+    if not comment:
+        return False
+
+    db_session = Session()
+    try:
+        db_session.add(Comment(post_id, session['user_id'], comment))
+        db_session.commit()
     except Exception as e:
         print(e)
         return False

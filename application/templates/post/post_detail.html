@@ -13,10 +13,10 @@
             <button class="btn col-sm-2 {% if post.liked == True %} btn-danger {% else %} btn-outline-danger {% endif %}"
                     id="LikeButton{{ post.id }}" onclick="LikePost({{ post.id }})">Like</button>
             <span id="NumLikes{{ post.id }}"> {{ post.likes|length }} </span> likes
-            <span> {{ post.comments|length }} </span> comments
+            <span id="NumComments{{ post.id }}"> {{ post.comments|length }} </span> comments
         </div>
 
-        <div class="my-4 mx-auto container">
+        <div class="my-4 mx-auto container" id="commentGroup{{ post.id }}">
             {% for comment in post.comments %}
                 <div class="row">
                     <div class="col-sm-3 align-left"> {{ comment.username }} </div>
@@ -26,7 +26,7 @@
         </div>
 
         <div class="my-4">
-            <form method="POST" id="postComment">
+            <form method="POST" id="postComment" class="postComment">
                 <div class="input-group mx-auto">
                     <input type="text" id="comment_text" name="comment_text" class="form-control" placeholder="Type Comment"
                     aria-label="Type Comment" aria-describedby="basic-addon2">

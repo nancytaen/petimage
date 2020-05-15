@@ -31,7 +31,7 @@ def create_post():
                            nav=logged_in_nav(create=True), user=logged_in_user(), form=post_form)
 
 
-@post.route('/post/<post_id>', methods=['GET', 'POST'])
+@post.route('/post/detail/<post_id>', methods=['GET', 'POST'])
 def post_page(post_id):
     post_info = get_post_detail(post_id)
     return render_template("post/post_detail.html", title="Post", description="Post detail page",
@@ -59,9 +59,10 @@ def comment_post(post_id):
     :return: status 0 for success, 1 for error
     """
     comment = request.form['comment_text']
+    print(comment)
     if not comment_post_api(post_id, comment):
         return jsonify({'status': 1})
-    return jsonify({'status': 0})
+    return jsonify({'status': 0, 'comment': comment, 'username': session['username']})
 
 
 @post.route('/sign_s3/<post_type>')

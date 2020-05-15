@@ -3,20 +3,22 @@
 {% block content %}
     <div>
     {% for post in posts %}
-        <div class="card col-sm-8 mx-auto">
+        <div class="card col-sm-6 mx-auto my-4">
         <div class="text-center">
             <div>
                 <p> {{ post.username }}</p>
-                <img src="{{ post.img_url }}" alt="Post Image" width="500" height="300" />
                 <h2> {{ post.title }} </h2>
                 <p> {{ post.body }} </p>
+                <img src="{{ post.img_url }}" alt="Post Image" width="500" height="300" class="img-fluid my-2" />
             </div>
             <div>
                 <button class="btn col-sm-2 {% if post.liked == True %} btn-danger {% else %} btn-outline-danger {% endif %}"
                    id="LikeButton{{ post.id }}" onclick="LikePost({{ post.id }})">Like</button>
-                <a href="/post/{{ post.id }}"> <span id="NumLikes{{ post.id }}"> {% if post.likes %} {{ post.likes }} {% else %} 0 {% endif %} </span> </a> likes
-                <a href="/post/{{ post.id }}"> {% if post.comments %} {{ post.comments }} {% else %} 0 {% endif %} </a> comments
+                <a href="/post/detail/{{ post.id }}"> <span id="NumLikes{{ post.id }}"> {% if post.likes %} {{ post.likes }} {% else %} 0 {% endif %} </span> </a> likes
+                <a href="/post/detail/{{ post.id }}"> <span id="NumComments{{ post.id }}"> {% if post.comments %} {{ post.comments }} {% else %} 0 {% endif %} </span> </a> comments
             </div>
+        </div>
+        <div class="mx-auto container" id="commentGroup{{ post.id }}">
         </div>
         </div>
     {% endfor %}

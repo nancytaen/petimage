@@ -16,10 +16,19 @@ function LikePost(post_id){
 
 
 //comment
-$('#postComment').submit(function(){
+$('.postComment').submit(function(){
   event.preventDefault();
   const postID = $('#postID').val();
+  console.log($(this).serialize());
+  console.log(postID);
   $.post('/post/comment/' + postID, $(this).serialize(), function(data){
-    console.log(data);
+    if (data.status === 0){
+      $('#commentGroup' + postID).append('<div class="row">\n' +
+        '                    <div class="col-sm-3 align-left"> ' + data.username + ' </div>\n' +
+        '                    <div class="col-sm-9 align-left"> ' + data.comment + ' </div>\n' +
+        '                </div>');
+      const num = $('#NumComments' + postID);
+      num.html(parseInt(num.html(), 10) + 1);
+    }
   })
 });

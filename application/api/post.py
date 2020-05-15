@@ -110,7 +110,6 @@ def comment_post_api(post_id, comment):
 
     if not comment:
         return False
-
     db_session = Session()
     try:
         db_session.add(Comment(post_id, session['user_id'], comment))

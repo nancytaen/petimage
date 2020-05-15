@@ -13,3 +13,13 @@ function LikePost(post_id){
     }
   })
 }
+
+
+//comment
+$('#postComment').submit(function(){
+  event.preventDefault();
+  const postID = $('#postID').val();
+  $.post('/post/comment/' + postID, $(this).serialize(), function(data){
+    console.log(data);
+  })
+});

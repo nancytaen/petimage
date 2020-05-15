@@ -51,6 +51,18 @@ def like_post(post_id):
     return jsonify({'status': 0})
 
 
+@post.route('/post/comment/<post_id>', methods=['POST'])
+def comment_post(post_id):
+    """
+    comment on a post
+    :param post_id:
+    :return: status 0 for success, 1 for error
+    """
+    comment = request.form['comment_text']
+
+    return jsonify({'status': 0})
+
+
 @post.route('/sign_s3/<post_type>')
 def sign_s3(post_type):
     """

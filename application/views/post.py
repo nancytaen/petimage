@@ -2,14 +2,14 @@ import json
 import hashlib
 from datetime import datetime
 
-from flask import Blueprint, render_template, request, session
+from flask import Blueprint, render_template, request, session, jsonify
 import boto3
 from botocore.client import Config
 
 import config
 from application.utility.navigation import logged_in_nav, logged_in_user
 from application.form import PostCreateForm
-from application.api.post import create_post_api, get_my_posts, get_post_detail
+from application.api.post import create_post_api, get_my_posts, get_post_detail, like_post_api
 
 post = Blueprint('post', __name__, template_folder="templates", static_folder="static")
 
@@ -40,11 +40,24 @@ def post_page(post_id):
 
 @post.route('/post/like/<post_id>', methods=['GET'])
 def like_post(post_id):
-    print(post_id)
+    """
+    like a post
+    :param post_id:
+    :return: status 0  for success, 1 for error
+    """
+
+    if not like_post_api(post_id):
+        return jsonify({'status': 1})
+    return jsonify({'status': 0})
 
 
 @post.route('/sign_s3/<post_type>')
 def sign_s3(post_type):
+    """
+    return s3 signature for uploading image to s3
+    :param post_type:
+    :return:
+    """
 
     file_name = hashlib.sha256((request.args.get('file_name') + post_type + session['username'] +
                                 str(datetime.now())).encode()).hexdigest() + ".png"

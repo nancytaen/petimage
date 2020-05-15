@@ -83,3 +83,7 @@ class Like(Base):
     user_id = Column(Integer, ForeignKey('user.user_id'), nullable=False)
     post_id = Column(Integer, ForeignKey('post.post_id'), nullable=False)
     is_unliked = Column(Boolean, nullable=False, default=False)
+
+    def __init__(self, post_id, user_id):
+        self.user_id = user_id
+        self.post_id = post_id

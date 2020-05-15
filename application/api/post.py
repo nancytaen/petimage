@@ -28,14 +28,19 @@ def get_my_posts():
                  'img_url': post.post_img_url, 'liked': True if like else False,
                  'username': session['username']} for post, like in posts]
     for like in likes:
-        my_posts[like[0]]['likes'] = like[1]
+        my_posts[len(my_posts) - like[0]]['likes'] = like[1]
     for comment in comments:
-        my_posts[comment[0]]['comments'] = comment[1]
+        my_posts[len(my_posts) - comment[0]]['comments'] = comment[1]
 
     return my_posts
 
 
 def get_post_detail(post_id):
+    """
+    query post details including likes and comments
+    :param post_id:
+    :return:
+    """
     db_session = Session()
     post_info = db_session.query(Post, User, func.count(distinct(Like.like_id))).filter(Post.post_id == post_id).join(
         User, User.user_id == Post.user_id).outerjoin(
@@ -70,4 +75,26 @@ def create_post_api(post_form):
     post_form.populate_obj(new_post)
     db_session.add(new_post)
     db_session.commit()
+    return True
+
+
+def like_post_api(post_id):
+    """
+    like post
+    :param post_id:
+    :return: False if error occurs
+    """
+
+    db_session = Session()
+    try:
+        existing_like = db_session.query(Like).filter(and_(Like.post_id == post_id, Like.user_id == session['user_id'])).one_or_none()
+        if existing_like:
+            existing_like.is_unliked = not existing_like.is_unliked
+        else:
+            db_session.add(Like(post_id, session['user_id']))
+        db_session.commit()
+        db_session.close()
+    except Exception as e:
+        print(e)
+        return False
     return True

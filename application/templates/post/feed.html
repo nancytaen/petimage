@@ -12,13 +12,33 @@
             <p> {{ post.body }} </p>
         </div>
         <div>
-            <a class="btn col-sm-2 {% if post.liked == True %} disabled btn-danger {% else %} btn-outline-danger {% endif %}"
-               href="post/like/{{ post.post_id }}">Like</a>
-            <a href="/post/{{ post.id }}"> {% if post.likes %} {{ post.likes }} {% else %} 0 {% endif %} </a> likes
+            <button class="btn col-sm-2 {% if post.liked == True %} btn-danger {% else %} btn-outline-danger {% endif %}"
+               id="LikeButton{{ post.id }}" onclick="LikePost({{ post.id }})">Like</button>
+            <a href="/post/{{ post.id }}"> <span id="NumLikes{{ post.id }}"> {% if post.likes %} {{ post.likes }} {% else %} 0 {% endif %} </span> </a> likes
             <a href="/post/{{ post.id }}"> {% if post.comments %} {{ post.comments }} {% else %} 0 {% endif %} </a> comments
         </div>
         </div>
         </div>
     {% endfor %}
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        function LikePost(post_id){
+
+          $.get('/post/like/' + post_id, function(data){
+            if (data.status === 0){
+              const button = $('#LikeButton' + post_id);
+              const num = $('#NumLikes' + post_id);
+              if (button.hasClass("btn-danger")){
+                num.html(parseInt(num.html(), 10) - 1);
+              } else {
+                num.html(parseInt(num.html(), 10) + 1);
+              }
+              button.toggleClass("btn-danger btn-outline-danger");
+            }
+          })
+        }
+    </script>
+
 {% endblock %}

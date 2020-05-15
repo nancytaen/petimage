@@ -38,6 +38,11 @@ def post_page(post_id):
                            nav=logged_in_nav(), user=logged_in_user(), post=post_info)
 
 
+@post.route('/post/like/<post_id>', methods=['GET'])
+def like_post(post_id):
+    print(post_id)
+
+
 @post.route('/sign_s3/<post_type>')
 def sign_s3(post_type):
 

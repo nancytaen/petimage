@@ -24,7 +24,7 @@ def create_app():
     @app.route('/top')
     def top_page():
         if session.get('logged_in'):
-            return redirect(url_for('post.feed_page'))
+            return redirect(url_for('post.feed_page', username=session['username']))
         return render_template("top.html",
                                title="top", description="this is top",
                                nav=top_level_nav())

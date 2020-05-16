@@ -19,7 +19,9 @@
         <div class="my-4 mx-auto container" id="commentGroup{{ post.id }}">
             {% for comment in post.comments %}
                 <div class="row">
-                    <div class="col-sm-3 align-left"> {{ comment.username }} </div>
+                    <div class="col-sm-3 align-left">
+                        <a href="{{ url_for('post.feed_page', username=comment.username) }}"> {{ comment.username }} </a>
+                    </div>
                     <div class="col-sm-9 align-left"> {{ comment.comment_body }} </div>
                 </div>
             {% endfor %}

@@ -14,9 +14,9 @@ from application.api.post import create_post_api, get_my_posts, get_post_detail,
 post = Blueprint('post', __name__, template_folder="templates", static_folder="static")
 
 
-@post.route('/post/feed')
-def feed_page():
-    my_posts = get_my_posts()
+@post.route('/post/feed/<username>')
+def feed_page(username):
+    my_posts = get_my_posts(username)
     return render_template("post/feed.html", title="My Feed", description="Display posts",
                            nav=logged_in_nav(feed=True), user=logged_in_user(), posts=my_posts)
 
@@ -59,7 +59,6 @@ def comment_post(post_id):
     :return: status 0 for success, 1 for error
     """
     comment = request.form['comment_text']
-    print(comment)
     if not comment_post_api(post_id, comment):
         return jsonify({'status': 1})
     return jsonify({'status': 0, 'comment': comment, 'username': session['username']})

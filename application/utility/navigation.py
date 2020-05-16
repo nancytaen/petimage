@@ -19,7 +19,7 @@ def logged_in_nav(feed=False, create=False):
     navigation bar content for logged in pages
     :return:
     """
-    return [{'name': 'My Feed', 'url': '/post/feed', 'status': feed},
+    return [{'name': 'My Feed', 'url': '/post/feed/' + session['username'], 'status': feed},
             {'name': 'Create Post', 'url': '/post/create', 'status': create}]
 
 

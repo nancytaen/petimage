@@ -3,30 +3,44 @@ from sqlalchemy import func, desc, and_, distinct
 
 from application.model.base import Session
 from application.model.posts import Post, Like, Comment
-from application.model.users import User
+from application.model.users import User, UserStatus
 from application.utility.message import PostMessage
 
 
-def get_my_posts():
+def get_my_posts(username):
     """
     query all posts by session user
     :return: list of dicts of posts
     """
-    db_session = Session()
 
-    posts = db_session.query(Post, func.count(distinct(Like.like_id))).filter(
-        and_(Post.user_id == session['user_id'], Post.is_deleted == False)).outerjoin(
+    db_session = Session()
+    if session['username'] == username:
+        user_id = session['user_id']
+    else:
+        user_id = db_session.query(User.user_id).filter(and_(
+            User.username == username, User.user_status == UserStatus.active)).one_or_none()
+        if not user_id:
+            return []
+
+    return get_timeline(db_session, [user_id])
+
+
+def get_timeline(db_session, user_ids):
+
+    posts = db_session.query(Post, User.username, func.count(distinct(Like.like_id))).filter(
+        and_(Post.user_id.in_(user_ids), Post.is_deleted == False)).join(User, and_(
+        User.user_id == Post.user_id, User.user_status == UserStatus.active)).outerjoin(
         Like, and_(Like.user_id == session['user_id'], Like.is_unliked == False,
                    Like.post_id == Post.post_id)).group_by(Post.post_id).order_by(
         desc(Post.updated_at)).all()
     likes = db_session.query(Like.post_id, func.count(distinct(Like.like_id))).filter(
-        Like.is_unliked == False).join(Post, Post.user_id == session['user_id']).group_by(Like.post_id).all()
+        Like.is_unliked == False).join(Post, Post.user_id.in_(user_ids)).group_by(Like.post_id).all()
     comments = db_session.query(Comment.post_id, func.count(distinct(Comment.comment_id))).filter(
-        Comment.is_deleted == False).join(Post, Post.user_id == session['user_id']).group_by(Comment.post_id).all()
+        Comment.is_deleted == False).join(Post, Post.user_id.in_(user_ids)).group_by(Comment.post_id).all()
 
     my_posts = [{'id': post.post_id, 'title': post.post_title, 'body': post.post_body,
                  'img_url': post.post_img_url, 'liked': True if like else False,
-                 'username': session['username']} for post, like in posts]
+                 'username': username} for post, username, like in posts]
     for like in likes:
         my_posts[len(my_posts) - like[0]]['likes'] = like[1]
     for comment in comments:

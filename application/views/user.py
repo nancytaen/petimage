@@ -35,7 +35,7 @@ def login():
             if message != UserMessage.LOGIN_SUCCESS:
                 flash(message)
             else:
-                return redirect(url_for('post.feed_page'))
+                return redirect(url_for('post.feed_page', username=session['username']))
     return render_template('user/login.html', title="Login",
                            description="Login", nav=top_level_nav(login=True), form=login_form)
 

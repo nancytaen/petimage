@@ -41,7 +41,7 @@
                 {% endif %}
             </div>
             <div class="text-center row">
-                <a class="btn btn-secondary" href="{{ url_for('post.feed_page') }}">Cancel</a>
+                <a class="btn btn-secondary" href="{{ url_for('post.feed_page', username=user.username) }}">Cancel</a>
                 <input class="btn btn-primary" type="submit" value="Update Change">
             </div>
         </form>

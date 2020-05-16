@@ -77,6 +77,9 @@ class Follow(Base):
     follow_user_id = Column(Integer, ForeignKey('user.user_id'), nullable=False)
     is_unfollowed = Column(Boolean, nullable=False, default=False)
 
+    follow = relationship("User", foreign_keys=[user_id], backref="followers")
+    following = relationship("User", foreign_keys=[follow_user_id], backref="follows")
+
     def __init__(self, user_id, follow_user_id):
         self.user_id = user_id
         self.follow_user_id = follow_user_id

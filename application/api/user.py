@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
 
 from flask import session
+from sqlalchemy import and_, func, distinct
 
 from application.model.base import Session
-from application.model.users import User, UserStatus
+from application.model.users import User, UserStatus, Follow
 from application.model.tokens import Token, TokenType, TokenStatus
 from application.utility.message import UserMessage, TokenMessage
 from application.send_mail import send_mail
@@ -12,6 +13,23 @@ from config import Config
 
 def get_current_user_obj(db_session):
     return db_session.query(User).filter(User.user_id == session['user_id']).one()
+
+
+def get_follow_info_by_username(db_session, username):
+    """
+    obtain user_id of user with username
+    :param db_session:
+    :param username:
+    :return: return dict of user_id, follows #, followers #/ None if username not found
+    """
+
+    following = db_session.query(User.user_id, func.count(distinct(Follow.follow_id))).filter(and_(
+        User.username == username, User.user_status == UserStatus.active)).outerjoin(
+        Follow, Follow.user_id == User.user_id).one_or_none()
+    followers = db_session.query(func.count(distinct(Follow.follow_id))).join(User, and_(
+        User.username == username, User.user_status == UserStatus.active)).filter(
+        Follow.follow_user_id == User.user_id).scalar()
+    return {'user_id': following[0], "follows": following[1], "followers": followers} if following[0] else None
 
 
 def signup_api(signup_form):

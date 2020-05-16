@@ -16,9 +16,9 @@ post = Blueprint('post', __name__, template_folder="templates", static_folder="s
 
 @post.route('/post/feed/<username>')
 def feed_page(username):
-    my_posts = get_my_posts(username)
-    return render_template("post/feed.html", title="My Feed", description="Display posts",
-                           nav=logged_in_nav(feed=True), user=logged_in_user(), posts=my_posts)
+    my_posts, follow_info = get_my_posts(username)
+    return render_template("post/feed.html", title=username, description="Display posts",
+                           nav=logged_in_nav(feed=True), user=logged_in_user(), follow_info=follow_info, posts=my_posts)
 
 
 @post.route('/post/create', methods=['GET', 'POST'])

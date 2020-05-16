@@ -5,27 +5,30 @@ from application.model.base import Session
 from application.model.posts import Post, Like, Comment
 from application.model.users import User, UserStatus
 from application.utility.message import PostMessage
+from application.api.user import get_follow_info_by_username
 
 
 def get_my_posts(username):
     """
-    query all posts by session user
-    :return: list of dicts of posts
+    query all posts by user with username
+    :return: list of dicts of posts, follow_info
     """
 
     db_session = Session()
-    if session['username'] == username:
-        user_id = session['user_id']
-    else:
-        user_id = db_session.query(User.user_id).filter(and_(
-            User.username == username, User.user_status == UserStatus.active)).one_or_none()
-        if not user_id:
-            return []
+    user_info = get_follow_info_by_username(db_session, username)
+    if not user_info:
+        return [], None
 
-    return get_timeline(db_session, [user_id])
+    return get_timeline(db_session, [user_info['user_id']]), user_info
 
 
 def get_timeline(db_session, user_ids):
+    """
+    obtain posts, likes, and comments belonged to user_ids
+    :param db_session:
+    :param user_ids:
+    :return:
+    """
 
     posts = db_session.query(Post, User.username, func.count(distinct(Like.like_id))).filter(
         and_(Post.user_id.in_(user_ids), Post.is_deleted == False)).join(User, and_(

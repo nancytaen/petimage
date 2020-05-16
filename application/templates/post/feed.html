@@ -6,7 +6,7 @@
         {{ follow_info.follows }} Follows
         {{ follow_info.followers }} Followers
         {% if user.username != title %}
-            <button class="col-sm-2">Follow</button>
+            <button class="col-sm-2 btn btn-light"> {% if follow_info.is_following %} Unfollow {% else %} Follow {% endif %} </button>
         {% endif %}
     </div>
     {% include 'post/posts_layout.html' %}

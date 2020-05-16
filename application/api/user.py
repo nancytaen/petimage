@@ -23,13 +23,19 @@ def get_follow_info_by_username(db_session, username):
     :return: return dict of user_id, follows #, followers #/ None if username not found
     """
 
-    following = db_session.query(User.user_id, func.count(distinct(Follow.follow_id))).filter(and_(
+    follow = db_session.query(User.user_id, func.count(distinct(Follow.follow_id))).filter(and_(
         User.username == username, User.user_status == UserStatus.active)).outerjoin(
-        Follow, Follow.user_id == User.user_id).one_or_none()
+        Follow, and_(Follow.user_id == User.user_id, Follow.is_unfollowed == False)).one_or_none()
     followers = db_session.query(func.count(distinct(Follow.follow_id))).join(User, and_(
         User.username == username, User.user_status == UserStatus.active)).filter(
-        Follow.follow_user_id == User.user_id).scalar()
-    return {'user_id': following[0], "follows": following[1], "followers": followers} if following[0] else None
+        and_(Follow.follow_user_id == User.user_id, Follow.is_unfollowed == False)).scalar()
+    is_following = db_session.query(Follow.follow_id).join(User, and_(
+        User.username == username, User.user_status == UserStatus.active)).filter(
+        and_(Follow.user_id == session['user_id'], Follow.follow_user_id == User.user_id,
+             Follow.is_unfollowed == False)).one_or_none()
+
+    return {'user_id': follow[0], "follows": follow[1], "followers": followers,
+            "is_following": True if is_following else False} if follow[0] else None
 
 
 def signup_api(signup_form):

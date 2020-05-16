@@ -4,7 +4,7 @@ import secrets
 import hashlib
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, SmallInteger, String, DateTime, Enum
+from sqlalchemy import Column, Integer, SmallInteger, String, DateTime, Enum, Boolean, ForeignKey
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -61,3 +61,22 @@ class User(Base):
         raw_token = hashlib.sha256((token_type + secrets.token_urlsafe(20)
                                     + self.username + self.email + str(datetime.now())).encode()).hexdigest()
         return raw_token
+
+
+class Follow(Base):
+    """
+    table recording a user's follows
+    """
+
+    __tablename__ = 'follow'
+
+    follow_id = Column(Integer, primary_key=True, autoincrement=True)
+    created_at = Column(DateTime, nullable=False, default=func.now())
+    updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
+    user_id = Column(Integer, ForeignKey('user.user_id'), nullable=False)
+    follow_user_id = Column(Integer, ForeignKey('user.user_id'), nullable=False)
+    is_unfollowed = Column(Boolean, nullable=False, default=False)
+
+    def __init__(self, user_id, follow_user_id):
+        self.user_id = user_id
+        self.follow_user_id = follow_user_id

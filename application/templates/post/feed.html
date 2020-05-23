@@ -4,9 +4,11 @@
     <div>
     <div class="text-center col-sm-6 mx-auto">
         {{ follow_info.follows }} Follows
-        {{ follow_info.followers }} Followers
+        <span id="followerNum"> {{ follow_info.followers }} </span>  Followers
         {% if user.username != title %}
-            <button class="col-sm-2 btn btn-light"> {% if follow_info.is_following %} Unfollow {% else %} Follow {% endif %} </button>
+            <button class="col-sm-2 btn btn-light" id="FollowUser" onclick="FollowUser('{{ title }}')">
+                <span id="followButtonVal"> {% if follow_info.is_following %} Unfollow {% else %} Follow {% endif %} </span>
+            </button>
         {% endif %}
     </div>
     {% include 'post/posts_layout.html' %}

@@ -1,6 +1,8 @@
-from flask import Blueprint, request, render_template, redirect, url_for, flash, session
+from flask import Blueprint, request, render_template, redirect, url_for, flash, session, jsonify
+from sqlalchemy import and_
 
 from application.model.base import Session
+from application.model.users import Follow, User
 from application.form import UserRegistrationForm, UserLoginForm, UserAccountForm
 from application.utility.navigation import top_level_nav, logged_in_user, logged_in_nav
 from application.api.user import signup_api, login_api, verify_token_url, get_current_user_obj
@@ -77,3 +79,22 @@ def account_page():
     db_session.close()
     return render_template('user/account.html', title="Account", description="Account Detail",
                            nav=logged_in_nav(), user=logged_in_user(), form=account_form)
+
+
+# follow/unfollow
+@user.route('/user/follow', methods=['POST'])
+def follow_user():
+    other_user = request.form['username']
+    db_session = Session()
+    unfollowed = False
+    existing_follow = db_session.query(Follow).filter(and_(
+        Follow.user_id == session['user_id'], Follow.follow_user_id == User.user_id)).join(
+        User, User.username == other_user).one_or_none()
+    if existing_follow:
+        unfollowed = not existing_follow.is_unfollowed
+        existing_follow.is_unfollowed = unfollowed
+    else:
+        new_follow = Follow(session['user_id'], db_session.query(User.user_id).filter(User.username == other_user))
+        db_session.add(new_follow)
+    db_session.commit()
+    return jsonify({'status': 0, 'unfollowed': unfollowed})

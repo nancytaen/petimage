@@ -32,3 +32,22 @@ $('.postComment').submit(function(){
     }
   })
 });
+
+
+//follow
+function FollowUser(username){
+  $.post('/user/follow', {'username': username}, function(data){
+    if (data.status === 0){
+      const num = $('#followerNum');
+      const label = $('#followButtonVal');
+      if (data.unfollowed === false) {
+        num.html(parseInt(num.html(), 10) + 1);
+        label.html('Unfollow');
+      } else {
+        num.html(parseInt(num.html(), 10) - 1);
+        label.html('Follow');
+      }
+    }
+
+  });
+}

@@ -9,7 +9,8 @@ from botocore.client import Config
 import config
 from application.utility.navigation import logged_in_nav, logged_in_user
 from application.form import PostCreateForm
-from application.api.post import create_post_api, get_my_posts, get_post_detail, like_post_api, comment_post_api
+from application.api.post import create_post_api, get_my_posts, get_post_detail, like_post_api, comment_post_api, \
+    get_follow_timeline
 
 post = Blueprint('post', __name__, template_folder="templates", static_folder="static")
 
@@ -17,7 +18,7 @@ post = Blueprint('post', __name__, template_folder="templates", static_folder="s
 @post.route('/post/feed/<username>')
 def feed_page(username):
     my_posts, follow_info = get_my_posts(username)
-    return render_template("post/feed.html", title=username, description="Display posts",
+    return render_template("post/feed.html", title=username, description="Display posts", feed_type = 'user',
                            nav=logged_in_nav(feed=True), user=logged_in_user(), follow_info=follow_info, posts=my_posts)
 
 
@@ -36,6 +37,13 @@ def post_page(post_id):
     post_info = get_post_detail(post_id)
     return render_template("post/post_detail.html", title="Post", description="Post detail page",
                            nav=logged_in_nav(), user=logged_in_user(), post=post_info)
+
+
+@post.route('/post/timeline', methods=['GET'])
+def timeline_page():
+    posts = get_follow_timeline()
+    return render_template("post/feed.html", title="Timeline", description="Timeline", nav=logged_in_nav(timeline=True),
+                           posts=posts)
 
 
 @post.route('/post/like/<post_id>', methods=['GET'])

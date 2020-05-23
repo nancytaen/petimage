@@ -3,7 +3,7 @@ from sqlalchemy import func, desc, and_, distinct
 
 from application.model.base import Session
 from application.model.posts import Post, Like, Comment
-from application.model.users import User, UserStatus
+from application.model.users import User, UserStatus, Follow
 from application.utility.message import PostMessage
 from application.api.user import get_follow_info_by_username
 
@@ -20,6 +20,18 @@ def get_my_posts(username):
         return [], None
 
     return get_timeline(db_session, [user_info['user_id']]), user_info
+
+
+def get_follow_timeline():
+    """
+    query all posts of follows
+    :return:
+    """
+    db_session = Session()
+    user_ids = [follow.follow_user_id for follow in db_session.query(Follow.follow_user_id).filter(and_(
+        Follow.user_id == session['user_id'], Follow.is_unfollowed == False))]
+    user_ids.append(session['user_id'])
+    return get_timeline(db_session, user_ids)
 
 
 def get_timeline(db_session, user_ids):

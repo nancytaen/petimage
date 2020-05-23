@@ -2,6 +2,7 @@
 
 {% block content %}
     <div>
+    {% if feed_type == 'user' %}
     <div class="text-center col-sm-6 mx-auto">
         {{ follow_info.follows }} Follows
         <span id="followerNum"> {{ follow_info.followers }} </span>  Followers
@@ -11,6 +12,7 @@
             </button>
         {% endif %}
     </div>
+    {% endif %}
     {% include 'post/posts_layout.html' %}
     </div>
 

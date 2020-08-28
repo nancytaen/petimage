@@ -3,7 +3,7 @@
         <div class="card col-sm-6 mx-auto my-4">
         <div class="text-center">
             <div>
-                <p> {{ post.username }}</p>
+                <p><a href="/post/feed/{{ post.username }}"> {{ post.username }} </a></p>
                 <h2> {{ post.title }} </h2>
                 <p> {{ post.body }} </p>
                 <img src="{{ post.img_url }}" alt="Post Image" width="500" height="300" class="img-fluid my-2" />

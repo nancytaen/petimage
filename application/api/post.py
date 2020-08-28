@@ -56,10 +56,18 @@ def get_timeline(db_session, user_ids):
     my_posts = [{'id': post.post_id, 'title': post.post_title, 'body': post.post_body,
                  'img_url': post.post_img_url, 'liked': True if like else False,
                  'username': username} for post, username, like in posts]
+    print("AA")
+    print(likes)
+    print(my_posts)
+    print("BB")
     for like in likes:
-        my_posts[len(my_posts) - like[0]]['likes'] = like[1]
+        post_idx = next((i for i, item in enumerate(my_posts) if item["id"] == like[0]), None)
+        if post_idx:
+            my_posts[post_idx]['likes'] = like[1]
     for comment in comments:
-        my_posts[len(my_posts) - comment[0]]['comments'] = comment[1]
+        com_idx = next((i for i, item in enumerate(my_posts) if item["id"] == comment[0]), None)
+        if com_idx:
+            my_posts[com_idx]['comments'] = comment[1]
 
     return my_posts
 

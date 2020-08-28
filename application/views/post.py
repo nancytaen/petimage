@@ -43,7 +43,7 @@ def post_page(post_id):
 def timeline_page():
     posts = get_follow_timeline()
     return render_template("post/feed.html", title="Timeline", description="Timeline", nav=logged_in_nav(timeline=True),
-                           posts=posts)
+                           posts=posts, user=logged_in_user())
 
 
 @post.route('/post/like/<post_id>', methods=['GET'])
